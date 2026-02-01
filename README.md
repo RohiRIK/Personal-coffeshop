@@ -1,6 +1,6 @@
-# ☕ Brista Platform (v2)
+# ☕ Personal Coffeshop (v2)
 
-The **Brista Platform** is a modern, full-stack Order Management System (OMS) and Kitchen Display System (KDS) designed for coffee shops. It features a seamless customer ordering experience and a powerful real-time admin dashboard.
+The **Personal Coffeshop** is a modern, full-stack Order Management System (OMS) and Kitchen Display System (KDS) designed for coffee shops. It features a seamless customer ordering experience and a powerful real-time admin dashboard.
 
 ## ✨ Features
 
@@ -35,8 +35,8 @@ The **Brista Platform** is a modern, full-stack Order Management System (OMS) an
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/your-username/brista-platform.git
-    cd brista-platform
+    git clone https://github.com/RohiRIK/Personal-coffeshop.git
+    cd Personal-coffeshop
     ```
 
 2.  Install dependencies:

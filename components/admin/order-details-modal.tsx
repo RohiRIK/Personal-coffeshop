@@ -111,10 +111,10 @@ export function OrderDetailsModal({ order, onClose }: OrderDetailsModalProps) {
 
                     <div className="flex items-center gap-3 mb-6">
                         <div className="w-12 h-12 rounded-full bg-stone-800 flex items-center justify-center text-xl font-bold text-stone-400">
-                            {order.userName.slice(0, 2).toUpperCase()}
+                            {(order.userName || 'Guest').slice(0, 2).toUpperCase()}
                         </div>
                         <div>
-                            <div className="font-bold text-stone-200 text-lg">{order.userName}</div>
+                            <div className="font-bold text-stone-200 text-lg">{order.userName || 'Guest'}</div>
                             {insights?.isVip && (
                                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500 text-stone-900 text-xs font-bold">
                                     <Star className="w-3 h-3 fill-current" /> VIP Member

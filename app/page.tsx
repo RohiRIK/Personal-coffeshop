@@ -81,7 +81,7 @@ function Hero() {
 
       <div className="relative z-10 text-center px-4">
         <h1 className="text-5xl md:text-7xl font-bold mb-6">
-          <span className="text-amber-400">Brista</span>{' '}
+          <span className="text-amber-400">Personal Coffeshop</span>{' '}
           <span className="text-stone-100">Coffee</span>
         </h1>
         <p className="text-xl md:text-2xl text-stone-300 mb-4 max-w-2xl mx-auto">

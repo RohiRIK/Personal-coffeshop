@@ -27,7 +27,7 @@ export function AdminSidebar() {
         <div className="w-64 bg-stone-900 border-r border-stone-800 flex flex-col h-screen fixed left-0 top-0">
             <div className="p-6">
                 <h1 className="text-xl font-bold">
-                    <span className="text-amber-400">Brista</span>{' '}
+                    <span className="text-amber-400">Personal Coffeshop</span>{' '}
                     <span className="text-stone-100">Admin</span>
                 </h1>
             </div>

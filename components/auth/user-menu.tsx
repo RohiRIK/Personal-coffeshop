@@ -33,7 +33,7 @@ export function UserMenu() {
                 onClick={() => signOut()}
                 className="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center hover:bg-amber-500/30 transition-colors"
             >
-                {user.displayName?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                {(user.displayName || user.email || 'Guest')?.[0]?.toUpperCase()}
             </button>
         </div>
     );

@@ -65,10 +65,11 @@ export function useCustomerInsights(userId: string | undefined) {
                     });
                 });
 
-                const getTop = (counts: Record<string, number>) => {
+                const getTop = (counts: Record<string, number>): string => {
                     const entries = Object.entries(counts);
                     if (entries.length === 0) return 'None';
-                    return entries.sort((a, b) => b[1] - a[1])[0][0];
+                    const sorted = entries.sort((a, b) => b[1] - a[1]);
+                    return sorted[0]?.[0] ?? 'None';
                 };
 
                 setInsights({

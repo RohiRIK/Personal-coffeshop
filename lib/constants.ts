@@ -83,5 +83,5 @@ export const ORDER_STATUSES = {
 };
 
 // Site configuration
-export const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'Brista Coffee';
-export const COMPANY_NAME = process.env.COMPANY_NAME || 'Brista Coffee Shop';
+export const SITE_NAME = process.env.NEXT_PUBLIC_SITE_NAME || 'Personal Coffeshop';
+export const COMPANY_NAME = process.env.COMPANY_NAME || 'Personal Coffeshop';

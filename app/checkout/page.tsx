@@ -42,9 +42,9 @@ export default function CheckoutPage() {
                 name: item.name,
                 price: item.price,
                 quantity: item.quantity,
-                milk: item.options.milk || null,
-                cup: item.options.cup || null,
-                specialInstructions: item.options.instructions || null,
+                milk: item.options.milk || undefined,
+                cup: item.options.cup || undefined,
+                specialInstructions: item.options.instructions || undefined,
             }));
 
             await createOrder(user.uid, user.displayName || user.email || 'Guest', orderItems);

@@ -1,4 +1,5 @@
 {
+  "name": "personal-coffeshop",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

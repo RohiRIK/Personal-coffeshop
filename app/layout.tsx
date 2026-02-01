@@ -7,7 +7,7 @@ import { AuthGuard } from 'components/auth/auth-guard';
 import { Navbar } from 'components/layout/navbar';
 import './globals.css';
 
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'Brista Coffee';
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || 'Personal Coffeshop';
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 
 export const metadata = {

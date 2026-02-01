@@ -77,9 +77,18 @@ With a move to a new house on the horizon, I wanted to create a system that lets
 
 ## 📱 Screenshots
 
-|   Customer Menu    |     Admin KDS      |
-| :----------------: | :----------------: |
-| _(Add Screenshot)_ | _(Add Screenshot)_ |
+### Customer Journey
+|   **Menu & Shop**    |     **Customization**      |
+| :------------------: | :------------------------: |
+| ![Shop](assets/Shop.png) | ![Customize](assets/Customization-drinks.png) |
+
+|   **Cart**    |     **Success**      |
+| :-----------: | :------------------: |
+| ![Cart](assets/Cart.png) | ![Success](assets/Order-Placed!.png) |
+
+### Admin Dashboard
+![Admin Portal](assets/Admin-portal.png)
+*Real-time Kitchen Display System (KDS)*
 
 ## 📄 License
 

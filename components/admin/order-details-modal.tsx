@@ -73,6 +73,36 @@ export function OrderDetailsModal({ order, onClose }: OrderDetailsModalProps) {
           </div>
 
           <div className="flex-1 overflow-y-auto p-0">
+            {/* Customer Review Section */}
+            {order.rating && (
+              <div className="bg-amber-500/10 border-b border-amber-500/20 p-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="flex">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-5 h-5 ${i < order.rating!
+                            ? "fill-amber-500 text-amber-500"
+                            : "text-stone-700"
+                          }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-amber-500 font-bold">
+                    {order.rating}.0
+                  </span>
+                </div>
+                {order.review && (
+                  <p className="text-stone-300 italic">"{order.review}"</p>
+                )}
+                {!order.review && (
+                  <p className="text-stone-500 text-sm italic">
+                    No written review provided.
+                  </p>
+                )}
+              </div>
+            )}
+
             <div className="bg-stone-950/30 p-4">
               <h3 className="text-xs font-bold text-stone-500 uppercase tracking-widest mb-3 flex items-center gap-2">
                 <Receipt className="w-4 h-4" /> Order Summary

@@ -19,63 +19,100 @@ export default function InventoryPage() {
         Manage real-time availability and stock levels.
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="space-y-8">
         {/* Milk Inventory */}
-        <section className="bg-stone-900 rounded-2xl p-6 border border-stone-800">
-          <h2 className="text-xl font-bold text-stone-100 mb-6 flex items-center gap-2">
-            <Milk className="w-5 h-5 text-amber-500" />
-            <span>Milk Options</span>
-          </h2>
-          <div className="space-y-4">
-            {MILK_OPTIONS.map((item) => (
-              <InventoryItemRow
-                key={item.id}
-                name={item.name}
-                available={isAvailable(item.id)}
-                quantity={getQuantity(item.id)}
-                onToggle={() =>
-                  toggleAvailability(item.id, isAvailable(item.id))
-                }
-                onUpdateStock={(qty) => updateStock(item.id, qty)}
-              />
-            ))}
+        <section className="bg-stone-900 rounded-2xl border border-stone-800 overflow-hidden">
+          <div className="p-6 border-b border-stone-800 flex items-center gap-3">
+            <div className="p-2 bg-stone-800 rounded-lg">
+              <Milk className="w-5 h-5 text-amber-500" />
+            </div>
+            <h2 className="text-xl font-bold text-stone-100">Milk Options</h2>
           </div>
+          <InventoryTable
+            items={MILK_OPTIONS}
+            isAvailable={isAvailable}
+            getQuantity={getQuantity}
+            onToggle={toggleAvailability}
+            onUpdateStock={updateStock}
+          />
         </section>
 
         {/* Cup Inventory */}
-        <section className="bg-stone-900 rounded-2xl p-6 border border-stone-800">
-          <h2 className="text-xl font-bold text-stone-100 mb-6 flex items-center gap-2">
-            <Coffee className="w-5 h-5 text-amber-500" />
-            <span>Cup Options</span>
-          </h2>
-          <div className="space-y-4">
-            {CUP_OPTIONS.map((item) => (
-              <InventoryItemRow
-                key={item.id}
-                name={item.name}
-                available={isAvailable(item.id)}
-                quantity={getQuantity(item.id)}
-                onToggle={() =>
-                  toggleAvailability(item.id, isAvailable(item.id))
-                }
-                onUpdateStock={(qty) => updateStock(item.id, qty)}
-              />
-            ))}
+        <section className="bg-stone-900 rounded-2xl border border-stone-800 overflow-hidden">
+          <div className="p-6 border-b border-stone-800 flex items-center gap-3">
+            <div className="p-2 bg-stone-800 rounded-lg">
+              <Coffee className="w-5 h-5 text-amber-500" />
+            </div>
+            <h2 className="text-xl font-bold text-stone-100">Cup Options</h2>
           </div>
+          <InventoryTable
+            items={CUP_OPTIONS}
+            isAvailable={isAvailable}
+            getQuantity={getQuantity}
+            onToggle={toggleAvailability}
+            onUpdateStock={updateStock}
+          />
         </section>
       </div>
     </div>
   );
 }
 
-function InventoryItemRow({
-  name,
+interface InventoryItemData {
+  id: string;
+  name: string;
+}
+
+interface InventoryTableProps {
+  items: InventoryItemData[];
+  isAvailable: (id: string) => boolean;
+  getQuantity: (id: string) => number;
+  onToggle: (id: string, current: boolean) => void;
+  onUpdateStock: (id: string, qty: number) => void;
+}
+
+function InventoryTable({
+  items,
+  isAvailable,
+  getQuantity,
+  onToggle,
+  onUpdateStock,
+}: InventoryTableProps) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full text-left border-collapse">
+        <thead className="bg-stone-950/50 text-stone-500 text-xs uppercase tracking-wider font-medium">
+          <tr>
+            <th className="px-6 py-4">Item Name</th>
+            <th className="px-6 py-4">Stock Level</th>
+            <th className="px-6 py-4 text-right">Availability</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-stone-800">
+          {items.map((item) => (
+            <InventoryRow
+              key={item.id}
+              item={item}
+              available={isAvailable(item.id)}
+              quantity={getQuantity(item.id)}
+              onToggle={() => onToggle(item.id, isAvailable(item.id))}
+              onUpdateStock={(qty) => onUpdateStock(item.id, qty)}
+            />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function InventoryRow({
+  item,
   available,
   quantity,
   onToggle,
   onUpdateStock,
 }: {
-  name: string;
+  item: InventoryItemData;
   available: boolean;
   quantity: number;
   onToggle: () => void;
@@ -86,7 +123,6 @@ function InventoryItemRow({
   const [isEditing, setIsEditing] = useState(false);
   const [editValue, setEditValue] = useState(quantity.toString());
 
-  // Sync edits if external quantity changes (unless editing)
   useEffect(() => {
     if (!isEditing) setEditValue(quantity.toString());
   }, [quantity, isEditing]);
@@ -96,7 +132,7 @@ function InventoryItemRow({
     if (!isNaN(val) && val >= 0) {
       onUpdateStock(val);
     } else {
-      setEditValue(quantity.toString()); // Revert if invalid
+      setEditValue(quantity.toString());
     }
     setIsEditing(false);
   };
@@ -110,27 +146,13 @@ function InventoryItemRow({
   };
 
   return (
-    <div className="flex items-center justify-between p-4 bg-stone-800 rounded-xl border border-stone-700">
-      <div className="flex-1">
+    <tr className="hover:bg-stone-800/30 transition-colors group">
+      <td className="px-6 py-4">
+        <div className="font-bold text-stone-200">{item.name}</div>
+        <div className="text-xs text-stone-500 font-mono mt-0.5">ID: {item.id}</div>
+      </td>
+      <td className="px-6 py-4">
         <div className="flex items-center gap-3">
-          <span
-            className={`font-medium ${available ? "text-stone-200" : "text-stone-500 line-through"}`}
-          >
-            {name}
-          </span>
-          {isLowStock && (
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-500 border border-amber-500/20 uppercase tracking-wide">
-              Low Stock
-            </span>
-          )}
-          {isOutOfStock && (
-            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-500/20 text-red-500 border border-red-500/20 uppercase tracking-wide">
-              Out of Stock
-            </span>
-          )}
-        </div>
-
-        <div className="flex items-center gap-2 mt-1">
           {isEditing ? (
             <div className="flex items-center gap-2">
               <input
@@ -142,32 +164,52 @@ function InventoryItemRow({
                 autoFocus
                 className="w-20 bg-stone-950 border border-amber-500 rounded px-2 py-1 text-sm text-stone-100 focus:outline-none"
               />
-              <span className="text-xs text-stone-500">Press Enter</span>
+              <span className="text-xs text-stone-500">Enter to save</span>
             </div>
           ) : (
             <div
-              className="text-xs text-stone-500 font-mono hover:text-amber-500 cursor-pointer flex items-center gap-1 transition-colors group"
+              className="group/qty flex items-center gap-2 cursor-pointer"
               onClick={() => setIsEditing(true)}
-              title="Click to edit quantity"
             >
-              {quantity} units
-              <span className="opacity-0 group-hover:opacity-100 text-[10px] bg-stone-700 px-1 rounded">Edit</span>
+              <span className={`text-lg font-mono font-medium ${isOutOfStock ? "text-red-500" : isLowStock ? "text-amber-500" : "text-stone-300"}`}>
+                {quantity}
+              </span>
+              <span className="text-xs text-stone-500 opacity-0 group-hover/qty:opacity-100 transition-opacity bg-stone-800 px-1.5 py-0.5 rounded">
+                Edit
+              </span>
             </div>
           )}
-        </div>
-      </div>
 
-      <button
-        onClick={onToggle}
-        className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 focus:ring-offset-stone-900 ${available ? "bg-green-500" : "bg-red-500"
-          }`}
-      >
-        <span
-          className={`${available ? "translate-x-7" : "translate-x-1"
-            } inline-block h-6 w-6 transform rounded-full bg-white transition-transform duration-200 ease-in-out`}
-        />
-        <span className="sr-only">Toggle availability</span>
-      </button>
-    </div>
+          <div className="flex gap-2">
+            {isOutOfStock && (
+              <span className="px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] uppercase font-bold tracking-wide">
+                Out of Stock
+              </span>
+            )}
+            {isLowStock && (
+              <span className="px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20 text-amber-500 text-[10px] uppercase font-bold tracking-wide">
+                Low Stock
+              </span>
+            )}
+          </div>
+        </div>
+      </td>
+      <td className="px-6 py-4 text-right">
+        <button
+          onClick={onToggle}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${available ? "bg-green-500" : "bg-stone-700"
+            }`}
+        >
+          <span
+            className={`${available ? "translate-x-6" : "translate-x-1"
+              } inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ease-in-out`}
+          />
+          <span className="sr-only">Toggle availability</span>
+        </button>
+        <div className="text-[10px] text-stone-500 mt-1 font-medium uppercase tracking-wide">
+          {available ? "Active" : "Disabled"}
+        </div>
+      </td>
+    </tr>
   );
 }

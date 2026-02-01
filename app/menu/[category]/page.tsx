@@ -11,7 +11,10 @@ export async function generateStaticParams() {
   }));
 }
 
-export function generateMetadata({ params }: { params: { category: string } }) {
+export async function generateMetadata(props: {
+  params: Promise<{ category: string }>;
+}) {
+  const params = await props.params;
   const category = CATEGORIES.find((c) => c.id === params.category);
   return {
     title: category ? `${category.name} Menu` : "Menu",
@@ -26,10 +29,9 @@ function MenuCard({ item }: { item: MenuItem }) {
     <Link
       href={`/drink/${item.id}`}
       className={`group relative bg-stone-800 rounded-xl overflow-hidden transition-all duration-300 
-        ${
-          item.available
-            ? "hover:shadow-xl hover:shadow-amber-500/10 hover:scale-[1.02] cursor-pointer"
-            : "opacity-60 cursor-not-allowed"
+        ${item.available
+          ? "hover:shadow-xl hover:shadow-amber-500/10 hover:scale-[1.02] cursor-pointer"
+          : "opacity-60 cursor-not-allowed"
         }`}
     >
       <div className="aspect-square relative">
@@ -38,17 +40,15 @@ function MenuCard({ item }: { item: MenuItem }) {
           alt={item.name}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className={`object-cover transition-transform duration-500 ${
-            item.available ? "group-hover:scale-110" : "grayscale"
-          }`}
+          className={`object-cover transition-transform duration-500 ${item.available ? "group-hover:scale-110" : "grayscale"
+            }`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
         {/* Tag badge */}
         <div
-          className={`absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${
-            item.tag === "Hot" ? "bg-orange-500" : "bg-blue-500"
-          }`}
+          className={`absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${item.tag === "Hot" ? "bg-orange-500" : "bg-blue-500"
+            }`}
         >
           {item.tag === "Hot" ? "🔥" : "❄️"} {item.tag}
         </div>
@@ -90,11 +90,10 @@ function CategoryFilter({ activeCategory }: { activeCategory?: string }) {
         <Link
           key={cat.id}
           href={cat.path}
-          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-            activeCategory === cat.id
+          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${activeCategory === cat.id
               ? "bg-amber-500 text-stone-900"
               : "bg-stone-800 text-stone-300 hover:bg-stone-700"
-          }`}
+            }`}
         >
           {cat.name}
         </Link>

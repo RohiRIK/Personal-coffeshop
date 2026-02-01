@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { useAuth } from "contexts/auth-context";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Coffee, Settings } from "lucide-react";
 
 interface AuthFormProps {
   mode?: "login" | "signup";
@@ -14,14 +16,49 @@ export function AuthForm({
   onSuccess,
 }: AuthFormProps) {
   const [mode, setMode] = useState<"login" | "signup">(initialMode);
+  const [loginType, setLoginType] = useState<"guest" | "admin">("guest");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const { signIn, signUp, signInWithGoogle } = useAuth();
+  const { user, signIn, signUp, signInWithGoogle } = useAuth();
   const router = useRouter();
+
+  const getRedirectPath = () => (loginType === "admin" ? "/admin" : "/menu");
+
+  // If user is already logged in, show options
+  if (user) {
+    return (
+      <div className="w-full max-w-md mx-auto p-6 bg-stone-800 rounded-2xl border border-stone-700">
+        <h2 className="text-2xl font-bold text-center text-stone-100 mb-4">
+          Welcome back, {user.displayName || user.email}!
+        </h2>
+        <p className="text-center text-stone-400 mb-6">
+          You&apos;re already signed in.
+        </p>
+
+        <div className="space-y-3">
+          <Link
+            href="/menu"
+            className="block w-full py-3 rounded-xl font-bold text-lg bg-amber-500 hover:bg-amber-400 text-stone-900 transition-colors text-center"
+          >
+            Go to Menu
+          </Link>
+
+          {user.role === "admin" && (
+            <Link
+              href="/admin"
+              className="block w-full py-3 rounded-xl font-bold text-lg bg-stone-700 hover:bg-stone-600 text-stone-100 border border-stone-600 transition-colors text-center"
+            >
+              Admin Portal
+            </Link>
+          )}
+        </div>
+      </div>
+    );
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +72,7 @@ export function AuthForm({
         await signUp(email, password, displayName);
       }
       onSuccess?.();
-      router.push("/menu");
+      router.push(getRedirectPath());
     } catch (err: any) {
       setError(err.message || "An error occurred");
     } finally {
@@ -50,7 +87,7 @@ export function AuthForm({
     try {
       await signInWithGoogle();
       onSuccess?.();
-      router.push("/menu");
+      router.push(getRedirectPath());
     } catch (err: any) {
       setError(err.message || "An error occurred");
     } finally {
@@ -60,6 +97,32 @@ export function AuthForm({
 
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-stone-800 rounded-2xl border border-stone-700">
+      {/* Login Type Toggle */}
+      <div className="flex mb-6 bg-stone-900 rounded-xl p-1">
+        <button
+          type="button"
+          onClick={() => setLoginType("guest")}
+          className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${loginType === "guest"
+              ? "bg-amber-500 text-stone-900"
+              : "text-stone-400 hover:text-stone-200"
+            }`}
+        >
+          <Coffee className="w-4 h-4" />
+          Shop
+        </button>
+        <button
+          type="button"
+          onClick={() => setLoginType("admin")}
+          className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${loginType === "admin"
+              ? "bg-amber-500 text-stone-900"
+              : "text-stone-400 hover:text-stone-200"
+            }`}
+        >
+          <Settings className="w-4 h-4" />
+          Admin
+        </button>
+      </div>
+
       <h2 className="text-2xl font-bold text-center text-stone-100 mb-6">
         {mode === "login" ? "Welcome Back" : "Create Account"}
       </h2>

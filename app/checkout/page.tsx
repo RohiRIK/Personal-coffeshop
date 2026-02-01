@@ -41,17 +41,20 @@ export default function CheckoutPage() {
 
     setSubmitting(true);
     try {
-      // Map cart items to order items
-      const orderItems: OrderItem[] = items.map((item) => ({
-        menuItemId: item.menuItemId,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        milk: item.options.milk || undefined,
-        cup: item.options.cup || undefined,
-        sugar: item.options.sugar || undefined,
-        specialInstructions: item.options.instructions || undefined,
-      }));
+      // Map cart items to order items - filter out undefined values for Firestore
+      const orderItems: OrderItem[] = items.map((item) => {
+        const orderItem: OrderItem = {
+          menuItemId: item.menuItemId,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        };
+        if (item.options.milk) orderItem.milk = item.options.milk;
+        if (item.options.cup) orderItem.cup = item.options.cup;
+        if (item.options.sugar) orderItem.sugar = item.options.sugar;
+        if (item.options.instructions) orderItem.specialInstructions = item.options.instructions;
+        return orderItem;
+      });
 
       const orderId = await createOrder(
         user.uid,

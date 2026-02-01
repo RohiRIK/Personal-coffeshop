@@ -73,6 +73,14 @@ export const CUP_OPTIONS = [
   { id: "glass", name: "Glass Cup", description: "Elegant glass cup" },
 ];
 
+// Sugar level options
+export const SUGAR_OPTIONS = [
+  { id: "none", name: "No Sugar", icon: "🚫" },
+  { id: "light", name: "Light", icon: "🍬" },
+  { id: "normal", name: "Normal", icon: "🍬🍬" },
+  { id: "extra", name: "Extra", icon: "🍬🍬🍬" },
+];
+
 // Order statuses
 export const ORDER_STATUSES = {
   pending: { label: "Pending", color: "yellow" },

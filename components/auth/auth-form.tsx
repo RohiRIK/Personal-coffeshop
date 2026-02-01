@@ -102,10 +102,11 @@ export function AuthForm({
         <button
           type="button"
           onClick={() => setLoginType("guest")}
-          className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${loginType === "guest"
+          className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
+            loginType === "guest"
               ? "bg-amber-500 text-stone-900"
               : "text-stone-400 hover:text-stone-200"
-            }`}
+          }`}
         >
           <Coffee className="w-4 h-4" />
           Shop
@@ -113,10 +114,11 @@ export function AuthForm({
         <button
           type="button"
           onClick={() => setLoginType("admin")}
-          className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${loginType === "admin"
+          className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
+            loginType === "admin"
               ? "bg-amber-500 text-stone-900"
               : "text-stone-400 hover:text-stone-200"
-            }`}
+          }`}
         >
           <Settings className="w-4 h-4" />
           Admin

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { MILK_OPTIONS, CUP_OPTIONS } from "lib/constants";
+import { MILK_OPTIONS, CUP_OPTIONS, SUGAR_OPTIONS } from "lib/constants";
 import { useCart } from "contexts/cart-context";
 import { useInventory } from "hooks/use-inventory";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ export function CustomizationForm({
   const { isAvailable } = useInventory();
   const [selectedMilk, setSelectedMilk] = useState("whole");
   const [selectedCup, setSelectedCup] = useState("ceramic");
+  const [selectedSugar, setSelectedSugar] = useState("normal");
   const [quantity, setQuantity] = useState(1);
   const [instructions, setInstructions] = useState("");
 
@@ -36,13 +37,11 @@ export function CustomizationForm({
       options: {
         milk: MILK_OPTIONS.find((m) => m.id === selectedMilk)?.name,
         cup: CUP_OPTIONS.find((c) => c.id === selectedCup)?.name,
+        sugar: SUGAR_OPTIONS.find((s) => s.id === selectedSugar)?.name,
         instructions: instructions || undefined,
       },
     });
     toast.success(`Added ${quantity}x ${itemName} to cart!`);
-
-    // Reset form slightly or keep as is?
-    // Typically good to give feedback. Toast is good.
   };
 
   return (
@@ -119,6 +118,27 @@ export function CustomizationForm({
         </p>
       </div>
 
+      {/* Sugar Level */}
+      <div>
+        <h3 className="text-lg font-bold text-stone-100 mb-3">Sugar Level</h3>
+        <div className="grid grid-cols-4 gap-2">
+          {SUGAR_OPTIONS.map((sugar) => (
+            <button
+              key={sugar.id}
+              onClick={() => setSelectedSugar(sugar.id)}
+              className={`p-3 rounded-lg border-2 transition-all duration-200 text-center ${
+                selectedSugar === sugar.id
+                  ? "border-amber-500 bg-amber-500/20 text-amber-400"
+                  : "border-stone-700 bg-stone-800 text-stone-300 hover:border-stone-600 hover:bg-stone-700"
+              }`}
+            >
+              <span className="block text-lg">{sugar.icon}</span>
+              <span className="text-xs font-medium">{sugar.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Quantity */}
       <div>
         <h3 className="text-lg font-bold text-stone-100 mb-3">Quantity</h3>
@@ -168,6 +188,9 @@ export function CustomizationForm({
           </p>
           <p>• {MILK_OPTIONS.find((m) => m.id === selectedMilk)?.name}</p>
           <p>• {CUP_OPTIONS.find((c) => c.id === selectedCup)?.name}</p>
+          <p>
+            • Sugar: {SUGAR_OPTIONS.find((s) => s.id === selectedSugar)?.name}
+          </p>
           {instructions && (
             <p className="italic text-stone-400">"{instructions}"</p>
           )}

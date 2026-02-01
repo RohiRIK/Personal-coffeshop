@@ -16,8 +16,8 @@
 <br />
 
 > ### 🏡 The Passion Project
-> _"The Personal Coffeshop is born from a simple desire: **to be the ultimate host.** With a move to a new house on the horizon, I wanted a system that lets my friends—connected to my Wi-Fi—order their favorite coffee exactly how they like it. It transforms my kitchen into a streamlined café, allowing me to focus on crafting the perfect cup rather than remembering who wanted oat milk."_
-> *Powered by caffeine and questionable life choices ☕*_
+>
+> _"The Personal Coffeshop is born from a simple desire: **to be the ultimate host.** With a move to a new house on the horizon, I wanted a system that lets my friends—connected to my Wi-Fi—order their favorite coffee exactly how they like it. It transforms my kitchen into a streamlined café, allowing me to focus on crafting the perfect cup rather than remembering who wanted oat milk."_ > _Powered by caffeine and questionable life choices ☕_\_
 
 ---
 
@@ -52,7 +52,7 @@ Most POS systems are built for profit; this one is built for **hospitality**.
 
 - **⚡ Zero Latency Performance:** Powered by **[Bun](https://bun.sh/)** and **[Next.js 15](https://nextjs.org/)** (App Router) for near-instant server-side rendering and static delivery.
 - **📡 Real-time Synchronization:** Leveraging **Firestore snapshots** for a "no-refresh" experience. When you click "Preparing" in the kitchen, your friend's phone vibrates in the living room instantly.
--*   **🔥 Minimal Hustle Backend:** Managed by **Firebase** for handling authentication and database, with minimal UI and zero server maintenance—less hustling for more efficient hosting.
+  -\* **🔥 Minimal Hustle Backend:** Managed by **Firebase** for handling authentication and database, with minimal UI and zero server maintenance—less hustling for more efficient hosting.
 - **📱 PWA Implementation:** Optimized meta tags and manifest allow guests to "Install" the app on their phone for a native feel without an app store download.
 - **🎨 Adaptive Design:** The Guest view is mobile-first, while the Admin Dashboard is optimized for an iPad mounted on the kitchen wall (KDS style).
 

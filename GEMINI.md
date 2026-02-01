@@ -5,42 +5,49 @@
 This repository contains the source code for the "Brista Platform", a web application designed for a home café experience ("Personal Coffeshop"). It is a full-stack application built with **Next.js 15**, **Bun**, and **Firebase**.
 
 The application provides:
-*   **Guest Interface:** Mobile-first PWA for browsing the menu, customizing drinks, and ordering.
-*   **Admin Dashboard:** Tablet-optimized Kitchen Display System (KDS) for managing orders and inventory.
+
+- **Guest Interface:** Mobile-first PWA for browsing the menu, customizing drinks, and ordering.
+- **Admin Dashboard:** Tablet-optimized Kitchen Display System (KDS) for managing orders and inventory.
 
 ## Tech Stack & Architecture
 
-*   **Framework:** Next.js 15 (App Router)
-*   **Runtime/Package Manager:** Bun
-*   **Language:** TypeScript
-*   **Styling:** Tailwind CSS (Custom "Stone & Amber" theme)
-*   **Backend:** Firebase (Firestore, Auth, Storage, Hosting)
-*   **Deployment:** Docker (GHCR) + PWA capabilities
+- **Framework:** Next.js 15 (App Router)
+- **Runtime/Package Manager:** Bun
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS (Custom "Stone & Amber" theme)
+- **Backend:** Firebase (Firestore, Auth, Storage, Hosting)
+- **Deployment:** Docker (GHCR) + PWA capabilities
 
 ## Development Rules & Best Practices
 
 ### 1. Code Style & Formatting
+
 **CRITICAL:** This project enforces strict Prettier formatting in CI.
-*   **Rule:** ALWAYS run `bun run prettier --write .` before committing changes.
-*   **Why:** The CI workflow (`ci.yml` or check step) will fail if code is not formatted. ignoring this leads to broken builds.
+
+- **Rule:** ALWAYS run `bun run prettier --write .` before committing changes.
+- **Why:** The CI workflow (`ci.yml` or check step) will fail if code is not formatted. ignoring this leads to broken builds.
 
 ### 2. Docker & CI/CD
+
 **CRITICAL:** The Docker build requires build-time environment variables for Firebase.
-*   **Rule:** When adding new `NEXT_PUBLIC_` variables, you MUST update:
-    1.  `Dockerfile` (add `ARG` and `ENV`).
-    2.  `.github/workflows/docker.yml` (add `build-args` mapping to Secrets).
-*   **Why:** Next.js inlines these variables at build time. If missing, the build fails (e.g. `auth/invalid-api-key`).
+
+- **Rule:** When adding new `NEXT_PUBLIC_` variables, you MUST update:
+  1.  `Dockerfile` (add `ARG` and `ENV`).
+  2.  `.github/workflows/docker.yml` (add `build-args` mapping to Secrets).
+- **Why:** Next.js inlines these variables at build time. If missing, the build fails (e.g. `auth/invalid-api-key`).
 
 ### 3. Type Safety
-*   **Rule:** Ensure interfaces in `lib/firebase/types.ts` are updated when new data fields (like `imageUrl`) are introduced.
-*   **Pre-Check:** Run `bun run build` locally to catch Type Errors before pushing.
+
+- **Rule:** Ensure interfaces in `lib/firebase/types.ts` are updated when new data fields (like `imageUrl`) are introduced.
+- **Pre-Check:** Run `bun run build` locally to catch Type Errors before pushing.
 
 ### 4. PWA & Next.js 15 Compatibility
-*   **Rule:** Use `modules: false` or specific Webpack config if `next-pwa` conflicts with Turbopack.
-*   **Current Config:** We use `next build --webpack` in `package.json` to avoid Turbopack issues with the PWA plugin.
+
+- **Rule:** Use `modules: false` or specific Webpack config if `next-pwa` conflicts with Turbopack.
+- **Current Config:** We use `next build --webpack` in `package.json` to avoid Turbopack issues with the PWA plugin.
 
 ## Key Commands
 
-*   `bun run dev`: Start development server.
-*   `bun run build`: Production build (checks Types and builds PWA).
-*   `bun run prettier --write .`: Fix all formatting issues.
+- `bun run dev`: Start development server.
+- `bun run build`: Production build (checks Types and builds PWA).
+- `bun run prettier --write .`: Fix all formatting issues.

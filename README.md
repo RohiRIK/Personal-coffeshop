@@ -49,8 +49,8 @@ Most POS systems are built for profit; this one is built for **hospitality**.
 
 *   **⚡ Zero Latency Performance:** Powered by **[Bun](https://bun.sh/)** and **[Next.js 15](https://nextjs.org/)** (App Router) for near-instant server-side rendering and static delivery.
 *   **📡 Real-time Synchronization:** Leveraging **Firestore snapshots** for a "no-refresh" experience. When you click "Preparing" in the kitchen, your friend's phone vibrates in the living room instantly.
-*   **� Minimal Hustle Backend:** Managed by **Firebase** for handling authentication, database, and hosting with zero server maintenance—perfect for efficient home hosting.
-*   **�📱 PWA Implementation:** Optimized meta tags and manifest allow guests to "Install" the app on their phone for a native feel without an app store download.
+*   **🔥 Minimal Hustle Backend:** Managed by **Firebase** for handling authentication and database, with minimal UI and zero server maintenance—perfect for efficient and less hustling and an ideal hosting friend.
+*   **📱 PWA Implementation:** Optimized meta tags and manifest allow guests to "Install" the app on their phone for a native feel without an app store download.
 *   **🎨 Adaptive Design:** The Guest view is mobile-first, while the Admin Dashboard is optimized for an iPad mounted on the kitchen wall (KDS style).
 
 ## ✨ Features Comparison

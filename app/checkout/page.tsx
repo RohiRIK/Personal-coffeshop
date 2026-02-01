@@ -52,7 +52,8 @@ export default function CheckoutPage() {
         if (item.options.milk) orderItem.milk = item.options.milk;
         if (item.options.cup) orderItem.cup = item.options.cup;
         if (item.options.sugar) orderItem.sugar = item.options.sugar;
-        if (item.options.instructions) orderItem.specialInstructions = item.options.instructions;
+        if (item.options.instructions)
+          orderItem.specialInstructions = item.options.instructions;
         return orderItem;
       });
 
@@ -127,7 +128,9 @@ export default function CheckoutPage() {
                           <span>{item.options.milk} • </span>
                         )}
                         {item.options.cup && <span>{item.options.cup} • </span>}
-                        {item.options.sugar && <span>{item.options.sugar}</span>}
+                        {item.options.sugar && (
+                          <span>{item.options.sugar}</span>
+                        )}
                         {item.options.instructions && (
                           <div className="italic mt-0.5">
                             "{item.options.instructions}"

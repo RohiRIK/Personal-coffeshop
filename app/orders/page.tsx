@@ -240,10 +240,11 @@ export default function MyOrdersPage() {
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-3 h-3 ${i < order.rating!
-                          ? "fill-amber-500 text-amber-500"
-                          : "text-stone-700"
-                          }`}
+                        className={`w-3 h-3 ${
+                          i < order.rating!
+                            ? "fill-amber-500 text-amber-500"
+                            : "text-stone-700"
+                        }`}
                       />
                     ))}
                   </div>
@@ -289,9 +290,8 @@ export default function MyOrdersPage() {
             // No need to refresh manually, onSnapshot will handle it
           }}
         />
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }
 

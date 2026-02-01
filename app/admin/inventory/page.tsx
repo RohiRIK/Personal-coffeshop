@@ -6,7 +6,8 @@ import { MILK_OPTIONS, CUP_OPTIONS } from "lib/constants";
 import { Milk, Coffee } from "lucide-react";
 
 export default function InventoryPage() {
-  const { isAvailable, getQuantity, toggleAvailability, updateStock, loading } = useInventory();
+  const { isAvailable, getQuantity, toggleAvailability, updateStock, loading } =
+    useInventory();
 
   if (loading) {
     return <div className="text-stone-400">Loading inventory...</div>;
@@ -149,7 +150,9 @@ function InventoryRow({
     <tr className="hover:bg-stone-800/30 transition-colors group">
       <td className="px-6 py-4">
         <div className="font-bold text-stone-200">{item.name}</div>
-        <div className="text-xs text-stone-500 font-mono mt-0.5">ID: {item.id}</div>
+        <div className="text-xs text-stone-500 font-mono mt-0.5">
+          ID: {item.id}
+        </div>
       </td>
       <td className="px-6 py-4">
         <div className="flex items-center gap-3">
@@ -171,7 +174,9 @@ function InventoryRow({
               className="group/qty flex items-center gap-2 cursor-pointer"
               onClick={() => setIsEditing(true)}
             >
-              <span className={`text-lg font-mono font-medium ${isOutOfStock ? "text-red-500" : isLowStock ? "text-amber-500" : "text-stone-300"}`}>
+              <span
+                className={`text-lg font-mono font-medium ${isOutOfStock ? "text-red-500" : isLowStock ? "text-amber-500" : "text-stone-300"}`}
+              >
                 {quantity}
               </span>
               <span className="text-xs text-stone-500 opacity-0 group-hover/qty:opacity-100 transition-opacity bg-stone-800 px-1.5 py-0.5 rounded">
@@ -197,12 +202,14 @@ function InventoryRow({
       <td className="px-6 py-4 text-right">
         <button
           onClick={onToggle}
-          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${available ? "bg-green-500" : "bg-stone-700"
-            }`}
+          className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none ${
+            available ? "bg-green-500" : "bg-stone-700"
+          }`}
         >
           <span
-            className={`${available ? "translate-x-6" : "translate-x-1"
-              } inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ease-in-out`}
+            className={`${
+              available ? "translate-x-6" : "translate-x-1"
+            } inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-200 ease-in-out`}
           />
           <span className="sr-only">Toggle availability</span>
         </button>

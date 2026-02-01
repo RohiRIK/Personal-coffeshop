@@ -62,19 +62,21 @@ export default function OrdersPage() {
         <div className="flex bg-stone-900 p-1 rounded-xl border border-stone-800">
           <button
             onClick={() => setViewMode("live")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${viewMode === "live"
-              ? "bg-stone-800 text-stone-100 shadow-sm"
-              : "text-stone-500 hover:text-stone-300"
-              }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              viewMode === "live"
+                ? "bg-stone-800 text-stone-100 shadow-sm"
+                : "text-stone-500 hover:text-stone-300"
+            }`}
           >
             <List className="w-4 h-4" /> Live Queue
           </button>
           <button
             onClick={() => setViewMode("history")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${viewMode === "history"
-              ? "bg-stone-800 text-stone-100 shadow-sm"
-              : "text-stone-500 hover:text-stone-300"
-              }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+              viewMode === "history"
+                ? "bg-stone-800 text-stone-100 shadow-sm"
+                : "text-stone-500 hover:text-stone-300"
+            }`}
           >
             <History className="w-4 h-4" /> Past Orders
           </button>

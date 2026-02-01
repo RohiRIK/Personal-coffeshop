@@ -81,10 +81,11 @@ export function OrderDetailsModal({ order, onClose }: OrderDetailsModalProps) {
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Star
                         key={i}
-                        className={`w-5 h-5 ${i < order.rating!
+                        className={`w-5 h-5 ${
+                          i < order.rating!
                             ? "fill-amber-500 text-amber-500"
                             : "text-stone-700"
-                          }`}
+                        }`}
                       />
                     ))}
                   </div>

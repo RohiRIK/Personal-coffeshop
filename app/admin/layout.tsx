@@ -51,11 +51,13 @@ export default function AdminLayout({
         </h1>
       </div>
 
-      <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <AdminSidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
 
       {/* Main Content - offset for sidebar on desktop */}
       <main className="md:pl-64 p-4 md:p-8">{children}</main>
     </div>
   );
 }
-

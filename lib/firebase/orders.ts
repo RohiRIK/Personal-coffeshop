@@ -43,7 +43,9 @@ export async function createOrder(
     const docRef = await addDoc(collection(db, ORDERS_COLLECTION), orderData);
 
     // Deduct Inventory asynchronously (don't await to keep UI fast)
-    deductInventory(items).catch(err => console.error("Inventory deduction failed:", err));
+    deductInventory(items).catch((err) =>
+      console.error("Inventory deduction failed:", err),
+    );
 
     return docRef.id;
   } catch (error) {

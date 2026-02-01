@@ -21,6 +21,7 @@ The **Personal Coffeshop** is a modern, full-stack Order Management System (OMS)
 - **📱 PWA Ready**: Installable on iOS/Android with offline support and app-like experience.
 
 ### 🐳 Deployment
+
 - **Docker**: Containerized with optimized `oven/bun:alpine` image.
 - **GHCR**: Automated builds pushed to GitHub Container Registry.
 

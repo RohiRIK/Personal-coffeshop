@@ -94,13 +94,13 @@ export async function deductInventory(items: any[]): Promise<void> {
       // 1. Milk
       if (item.milk) {
         // Map Name back to ID
-        const milkOption = MILK_OPTIONS.find(m => m.name === item.milk);
+        const milkOption = MILK_OPTIONS.find((m) => m.name === item.milk);
         const milkId = milkOption?.id || item.milk.toLowerCase(); // Fallback
         deductions[milkId] = (deductions[milkId] || 0) + item.quantity;
       }
       // 2. Cup
       if (item.cup) {
-        const cupOption = CUP_OPTIONS.find(c => c.name === item.cup);
+        const cupOption = CUP_OPTIONS.find((c) => c.name === item.cup);
         const cupId = cupOption?.id || item.cup.toLowerCase();
         deductions[cupId] = (deductions[cupId] || 0) + item.quantity;
       }
@@ -110,7 +110,8 @@ export async function deductInventory(items: any[]): Promise<void> {
         if (item.sugar === "light") amount = 1;
         if (item.sugar === "normal") amount = 2;
         if (item.sugar === "extra") amount = 3;
-        deductions["sugar"] = (deductions["sugar"] || 0) + (amount * item.quantity);
+        deductions["sugar"] =
+          (deductions["sugar"] || 0) + amount * item.quantity;
       }
     });
 

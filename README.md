@@ -1,6 +1,8 @@
 # ☕ Personal Coffeshop (v2)
 
-The **Personal Coffeshop** is a modern, full-stack Order Management System (OMS) and Kitchen Display System (KDS) designed for coffee shops. It features a seamless customer ordering experience and a powerful real-time admin dashboard.
+The **Personal Coffeshop** is a passion project born from a simple desire: **to be the ultimate host.**
+
+With a move to a new house on the horizon, I wanted to create a system that lets my friends—connected to my Wi-Fi—order their favorite coffee exactly how they like it, directly from their phones. It transforms my home kitchen into a streamlined café, allowing me to focus on crafting the perfect cup rather than remembering who wanted oat milk.
 
 ## ✨ Features
 

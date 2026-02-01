@@ -24,6 +24,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { RateOrderModal } from "components/orders/rate-order-modal";
 import { Star } from "lucide-react";
+import { useCustomerInsights } from "hooks/use-customer-insights";
+import { VIPBadge } from "components/ui/vip-badge";
 
 export default function MyOrdersPage() {
   const { user, loading: authLoading } = useAuth();
@@ -31,13 +33,16 @@ export default function MyOrdersPage() {
   const [loading, setLoading] = useState(true);
   const [ratingOrder, setRatingOrder] = useState<Order | null>(null);
   const router = useRouter();
+  const { insights } = useCustomerInsights(user?.uid);
 
   useEffect(() => {
-    if (authLoading) return;
-    if (!user) {
-      router.push("/login");
-      return;
+    if (!authLoading && !user) {
+      router.push("/auth/signin");
     }
+  }, [user, authLoading, router]);
+
+  useEffect(() => {
+    if (!user) return;
 
     const q = query(
       collection(db, "orders"),
@@ -70,13 +75,12 @@ export default function MyOrdersPage() {
     });
 
     return () => unsubscribe();
-  }, [user, authLoading, router]);
+  }, [user]);
 
   if (authLoading || loading) {
     return (
-      <div className="min-h-screen bg-stone-950 flex items-center justify-center text-stone-500 gap-2">
-        <Loader2 className="w-5 h-5 animate-spin" />
-        <span>Loading your history...</span>
+      <div className="min-h-screen bg-stone-950 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-amber-500"></div>
       </div>
     );
   }
@@ -88,177 +92,194 @@ export default function MyOrdersPage() {
     ["completed", "cancelled"].includes(o.status),
   );
 
+  const ordersUntilVip = Math.max(0, 10 - (insights?.orderCount || 0));
+
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 pb-20 pt-24 px-4">
-      <div className="max-w-2xl mx-auto space-y-8">
-        <header>
-          <h1 className="text-3xl font-bold text-amber-500 mb-2">My Orders</h1>
-          <p className="text-stone-400">
-            Track current orders and view your history.
-          </p>
-        </header>
-
-        {/* Active Orders Section */}
-        {activeOrders.length > 0 && (
-          <section>
-            <h2 className="text-sm font-bold text-stone-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              In Progress
-            </h2>
-            <div className="space-y-4">
-              {activeOrders.map((order) => (
-                <div
-                  key={order.id}
-                  className="bg-stone-900 rounded-2xl p-6 border border-amber-500/20 shadow-lg shadow-amber-900/10 relative overflow-hidden"
-                >
-                  <div className="absolute top-0 right-0 p-4">
-                    <StatusBadge status={order.status} size="large" />
-                  </div>
-
-                  <div className="mb-4">
-                    <div className="text-xs text-stone-500 uppercase tracking-wider mb-1">
-                      Order #{order.id.slice(-4)}
-                    </div>
-                    <div className="text-2xl font-bold text-white">
-                      {order.status === "ready"
-                        ? "Ready for Pickup"
-                        : order.status === "preparing"
-                          ? "Preparing your order..."
-                          : "Order Received"}
-                    </div>
-                    <div className="text-stone-400 text-sm mt-1">
-                      <Clock className="w-3 h-3 inline mr-1" />
-                      {formatDistanceToNow(order.createdAt, {
-                        addSuffix: true,
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 bg-stone-950/50 p-4 rounded-xl border border-stone-800">
-                    {order.items.map((item, idx) => (
-                      <div
-                        key={idx}
-                        className="flex justify-between items-start text-sm"
-                      >
-                        <div className="flex gap-3">
-                          <span className="font-bold text-stone-500">
-                            {item.quantity}x
-                          </span>
-                          <div>
-                            <span className="text-stone-200 block">
-                              {item.name}
-                            </span>
-                            <span className="text-stone-500 text-xs text block">
-                              {[item.milk, item.cup, item.sugar]
-                                .filter(Boolean)
-                                .join(", ")}
-                            </span>
-                          </div>
-                        </div>
-                        <span className="text-stone-500">
-                          ${(item.price * item.quantity).toFixed(2)}
-                        </span>
-                      </div>
-                    ))}
-                    <div className="pt-3 mt-3 border-t border-stone-800 flex justify-between font-bold">
-                      <span className="text-stone-400">Total</span>
-                      <span className="text-amber-500">
-                        ${order.total.toFixed(2)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Past Orders Section */}
-        <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-sm font-bold text-stone-500 uppercase tracking-widest flex items-center gap-2">
-              <HistoryIcon className="w-4 h-4" />
-              Past Orders
-            </h2>
+    <div className="min-h-screen bg-stone-950 pb-20 md:pb-8">
+      {/* Header */}
+      <header className="bg-stone-900 border-b border-stone-800 sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+          <div>
+            <h1 className="text-xl font-bold text-stone-100 flex items-center gap-3">
+              My Orders
+              {insights?.isVip && <VIPBadge />}
+            </h1>
+            {!insights?.isVip && ordersUntilVip > 0 && (
+              <p className="text-xs text-amber-500/80 mt-1 font-medium">
+                {ordersUntilVip} more orders to reach VIP status!
+              </p>
+            )}
           </div>
+          <Link
+            href="/menu"
+            className="text-amber-500 hover:text-amber-400 text-sm font-medium flex items-center gap-1"
+          >
+            <Coffee className="w-4 h-4" />
+            Order Now
+          </Link>
+        </div>
+      </header>
 
-          <div className="space-y-3">
-            {pastOrders.map((order) => (
+      {/* Active Orders Section */}
+      {activeOrders.length > 0 && (
+        <section>
+          <h2 className="text-sm font-bold text-stone-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+            In Progress
+          </h2>
+          <div className="space-y-4">
+            {activeOrders.map((order) => (
               <div
                 key={order.id}
-                className="bg-stone-900/50 hover:bg-stone-900 transition-colors rounded-xl p-4 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between group gap-4"
+                className="bg-stone-900 rounded-2xl p-6 border border-amber-500/20 shadow-lg shadow-amber-900/10 relative overflow-hidden"
               >
-                <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-stone-500">
-                    <Coffee className="w-5 h-5" />
+                <div className="absolute top-0 right-0 p-4">
+                  <StatusBadge status={order.status} size="large" />
+                </div>
+
+                <div className="mb-4">
+                  <div className="text-xs text-stone-500 uppercase tracking-wider mb-1">
+                    Order #{order.id.slice(-4)}
                   </div>
-                  <div>
-                    <div className="font-bold text-stone-200 text-sm">
-                      {order.items.map((i) => i.name).join(", ")}
-                    </div>
-                    <div className="text-xs text-stone-500 flex items-center gap-2">
-                      <span>{format(order.createdAt, "MMM d, h:mm a")}</span>
-                      <span>•</span>
-                      <span>${order.total.toFixed(2)}</span>
-                    </div>
+                  <div className="text-2xl font-bold text-white">
+                    {order.status === "ready"
+                      ? "Ready for Pickup"
+                      : order.status === "preparing"
+                        ? "Preparing your order..."
+                        : "Order Received"}
+                  </div>
+                  <div className="text-stone-400 text-sm mt-1">
+                    <Clock className="w-3 h-3 inline mr-1" />
+                    {formatDistanceToNow(order.createdAt, {
+                      addSuffix: true,
+                    })}
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 sm:self-center self-end">
-                  {order.status === "completed" && !order.rating && (
-                    <button
-                      onClick={() => setRatingOrder(order)}
-                      className="text-xs font-bold text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 px-3 py-1.5 rounded-full transition-colors border border-amber-500/20"
+                <div className="space-y-3 bg-stone-950/50 p-4 rounded-xl border border-stone-800">
+                  {order.items.map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex justify-between items-start text-sm"
                     >
-                      Rate Order
-                    </button>
-                  )}
-                  {order.rating && (
-                    <div className="flex gap-0.5" title="You rated this order">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-3 h-3 ${i < order.rating!
-                            ? "fill-amber-500 text-amber-500"
-                            : "text-stone-700"
-                            }`}
-                        />
-                      ))}
+                      <div className="flex gap-3">
+                        <span className="font-bold text-stone-500">
+                          {item.quantity}x
+                        </span>
+                        <div>
+                          <span className="text-stone-200 block">
+                            {item.name}
+                          </span>
+                          <span className="text-stone-500 text-xs text block">
+                            {[item.milk, item.cup, item.sugar]
+                              .filter(Boolean)
+                              .join(", ")}
+                          </span>
+                        </div>
+                      </div>
+                      <span className="text-stone-500">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </span>
                     </div>
-                  )}
-                  <StatusBadge status={order.status} size="small" />
+                  ))}
+                  <div className="pt-3 mt-3 border-t border-stone-800 flex justify-between font-bold">
+                    <span className="text-stone-400">Total</span>
+                    <span className="text-amber-500">
+                      ${order.total.toFixed(2)}
+                    </span>
+                  </div>
                 </div>
               </div>
             ))}
-
-            {pastOrders.length === 0 && orders.length > 0 && (
-              <div className="text-stone-500 italic text-sm text-center py-8 bg-stone-900/30 rounded-xl">
-                No past orders yet.
-              </div>
-            )}
-
-            {orders.length === 0 && (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-stone-900 rounded-full flex items-center justify-center mx-auto mb-4 text-stone-600">
-                  <Package className="w-8 h-8 scale-x-[-1]" />
-                </div>
-                <h3 className="text-lg font-bold text-stone-300 mb-2">
-                  No orders yet
-                </h3>
-                <p className="text-stone-500 mb-6 max-w-xs mx-auto">
-                  Looks like you haven't tried our delicious coffee yet!
-                </p>
-                <Link
-                  href="/menu"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-xl transition-colors"
-                >
-                  Browse Menu <ArrowRight className="w-4 h-4" />
-                </Link>
-              </div>
-            )}
           </div>
         </section>
-      </div>
+      )}
+
+      {/* Past Orders Section */}
+      <section>
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-bold text-stone-500 uppercase tracking-widest flex items-center gap-2">
+            <HistoryIcon className="w-4 h-4" />
+            Past Orders
+          </h2>
+        </div>
+
+        <div className="space-y-3">
+          {pastOrders.map((order) => (
+            <div
+              key={order.id}
+              className="bg-stone-900/50 hover:bg-stone-900 transition-colors rounded-xl p-4 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between group gap-4"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-stone-500">
+                  <Coffee className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="font-bold text-stone-200 text-sm">
+                    {order.items.map((i) => i.name).join(", ")}
+                  </div>
+                  <div className="text-xs text-stone-500 flex items-center gap-2">
+                    <span>{format(order.createdAt, "MMM d, h:mm a")}</span>
+                    <span>•</span>
+                    <span>${order.total.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3 sm:self-center self-end">
+                {order.status === "completed" && !order.rating && (
+                  <button
+                    onClick={() => setRatingOrder(order)}
+                    className="text-xs font-bold text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 px-3 py-1.5 rounded-full transition-colors border border-amber-500/20"
+                  >
+                    Rate Order
+                  </button>
+                )}
+                {order.rating && (
+                  <div className="flex gap-0.5" title="You rated this order">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3 h-3 ${i < order.rating!
+                          ? "fill-amber-500 text-amber-500"
+                          : "text-stone-700"
+                          }`}
+                      />
+                    ))}
+                  </div>
+                )}
+                <StatusBadge status={order.status} size="small" />
+              </div>
+            </div>
+          ))}
+
+          {pastOrders.length === 0 && orders.length > 0 && (
+            <div className="text-stone-500 italic text-sm text-center py-8 bg-stone-900/30 rounded-xl">
+              No past orders yet.
+            </div>
+          )}
+
+          {orders.length === 0 && (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-stone-900 rounded-full flex items-center justify-center mx-auto mb-4 text-stone-600">
+                <Package className="w-8 h-8 scale-x-[-1]" />
+              </div>
+              <h3 className="text-lg font-bold text-stone-300 mb-2">
+                No orders yet
+              </h3>
+              <p className="text-stone-500 mb-6 max-w-xs mx-auto">
+                Looks like you haven't tried our delicious coffee yet!
+              </p>
+              <Link
+                href="/menu"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-xl transition-colors"
+              >
+                Browse Menu <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
 
       {ratingOrder && (
         <RateOrderModal
@@ -268,8 +289,9 @@ export default function MyOrdersPage() {
             // No need to refresh manually, onSnapshot will handle it
           }}
         />
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 

@@ -1,7 +1,7 @@
-import Link from 'next/link';
-import { getMenuItems } from 'lib/firebase/menu';
-import type { MenuItem } from 'lib/firebase/types';
-import Image from 'next/image';
+import Link from "next/link";
+import { getMenuItems } from "lib/firebase/menu";
+import type { MenuItem } from "lib/firebase/types";
+import Image from "next/image";
 
 // Featured drinks section
 function FeaturedDrinks({ items }: { items: MenuItem[] }) {
@@ -29,14 +29,19 @@ function FeaturedDrinks({ items }: { items: MenuItem[] }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
                 {/* Tag badge */}
-                <div className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold ${item.tag === 'Hot' ? 'bg-orange-500' : 'bg-blue-500'
-                  }`}>
+                <div
+                  className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold ${
+                    item.tag === "Hot" ? "bg-orange-500" : "bg-blue-500"
+                  }`}
+                >
                   {item.tag}
                 </div>
 
                 {/* Price badge */}
                 <div className="absolute bottom-3 right-3 bg-stone-900/80 backdrop-blur-sm px-3 py-1 rounded-full">
-                  <span className="text-amber-400 font-bold">${item.price.toFixed(2)}</span>
+                  <span className="text-amber-400 font-bold">
+                    ${item.price.toFixed(2)}
+                  </span>
                 </div>
               </div>
 
@@ -73,15 +78,16 @@ function Hero() {
       <div
         className="absolute inset-0 opacity-30"
         style={{
-          backgroundImage: 'url(https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=80)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundImage:
+            "url(https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1920&q=80)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       />
 
       <div className="relative z-10 text-center px-4">
         <h1 className="text-5xl md:text-7xl font-bold mb-6">
-          <span className="text-amber-400">Personal Coffeshop</span>{' '}
+          <span className="text-amber-400">Personal Coffeshop</span>{" "}
           <span className="text-stone-100">Coffee</span>
         </h1>
         <p className="text-xl md:text-2xl text-stone-300 mb-4 max-w-2xl mx-auto">
@@ -107,7 +113,7 @@ export default async function HomePage() {
   try {
     menuItems = await getMenuItems();
   } catch (error) {
-    console.error('Error loading menu:', error);
+    console.error("Error loading menu:", error);
   }
 
   return (

@@ -3,6 +3,7 @@
 ## 1. Tech Stack Overview
 
 ### Frontend (brista-app-v2)
+
 - **Framework**: Next.js 15 (App Router with TypeScript)
 - **Styling**: Tailwind CSS 4 for utility-first styling
 - **State Management**: React Context API with custom hooks
@@ -10,12 +11,14 @@
 - **Images**: `next/image` for automatic optimization
 
 ### Backend & Services
+
 - **Authentication**: Firebase Authentication
 - **Database**: Firestore for structured data
 - **Storage**: Firebase Storage for media assets
 - **Hosting**: Vercel (recommended) or Firebase Hosting
 
 ### Development Tools
+
 - **Build Tool**: Next.js with Turbopack
 - **Package Manager**: Bun
 - **Code Formatting**: Prettier + ESLint
@@ -69,24 +72,29 @@ src/
 ## 3. State Management Strategy
 
 ### Global State with Context API
+
 - **AuthContext**: Manages user authentication state
 - **OrderContext**: Tracks current orders and queue status
 - **InventoryContext**: Maintains real-time inventory availability
 
 ### Local State with useState/useReducer
+
 - Component-specific state managed internally
 - Complex form states managed with useReducer
 
 ### Server State with React Query/SWR (Optional)
+
 - Caching and background updates for better UX
 - Optimistic updates for real-time feel
 
 ## 4. Real-time Synchronization
+
 - Firestore listeners for live order updates
 - Realtime Database for immediate inventory changes
 - WebSocket-like behavior using Firestore's real-time capabilities
 
 ## 5. Security Considerations
+
 - Client-side validation with server-side verification
 - Secure authentication tokens
 - Role-based access control

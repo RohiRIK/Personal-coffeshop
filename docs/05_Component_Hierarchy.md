@@ -1,6 +1,7 @@
 # Home Coffee Shop - Component Hierarchy
 
 ## Root Level
+
 ```
 App
 ├── AuthProvider
@@ -57,6 +58,7 @@ App
 ## Key Components Description
 
 ### Guest-Specific Components
+
 - **MenuItemCard**: Displays drink information with image and description
 - **CustomizationBuilder**: Allows milk, sugar, and cup selection
 - **MilkSelector**: Grid of available milk types with real-time availability
@@ -65,6 +67,7 @@ App
 - **RatingModal**: Modal that pops up for users to rate their coffee (1-5 stars) when order status becomes "Completed"
 
 ### Admin-Specific Components
+
 - **OrderCard**: Shows order details with action buttons
 - **NotificationAlert**: Sound and visual alerts for new orders
 - **InventoryItemToggle**: Switch to enable/disable inventory items

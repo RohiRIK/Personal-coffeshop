@@ -5,47 +5,54 @@ The **Personal Coffeshop** is a modern, full-stack Order Management System (OMS)
 ## ✨ Features
 
 ### 👤 Customer Experience
--   **Menu & Customization**: Browse drinks with rich visuals, filters, and customize options (milk, cup, notes).
--   **Cart System**: Persistent local cart with real-time totals.
--   **User Accounts**: Order history tracking, favorite items analysis, and "My Orders" status tracking.
--   **Live Updates**: Watch your order go from *Pending* → *Preparing* → *Ready* instantly.
+
+- **Menu & Customization**: Browse drinks with rich visuals, filters, and customize options (milk, cup, notes).
+- **Cart System**: Persistent local cart with real-time totals.
+- **User Accounts**: Order history tracking, favorite items analysis, and "My Orders" status tracking.
+- **Live Updates**: Watch your order go from _Pending_ → _Preparing_ → _Ready_ instantly.
 
 ### 👔 Admin Dashboard (Kitchen Display)
--   **Live Order Queue**: A high-density KDS (Kitchen Display System) to manage incoming orders.
--   **Status Control**: One-click status updates (Pending → Preparing → Ready → Completed).
--   **Menu Management**: Reactively toggle item availability (Sold Out) and manage prices.
--   **Inventory Management**: Real-time stock control for modifiers (Milk, Cups).
--   **Customer Insights**: View "VIP" status, total spend, and favorite drinks directly in the order ticket.
+
+- **Live Order Queue**: A high-density KDS (Kitchen Display System) to manage incoming orders.
+- **Status Control**: One-click status updates (Pending → Preparing → Ready → Completed).
+- **Menu Management**: Reactively toggle item availability (Sold Out) and manage prices.
+- **Inventory Management**: Real-time stock control for modifiers (Milk, Cups).
+- **Customer Insights**: View "VIP" status, total spend, and favorite drinks directly in the order ticket.
 
 ## 🛠️ Tech Stack
--   **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
--   **Language**: TypeScript
--   **Styling**: Tailwind CSS (Custom "Stone & Amber" Coffee Theme)
--   **Backend / DB**: Firebase (Firestore, Auth, Storage)
--   **Icons**: Lucide React
--   **Runtime**: Bun
+
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS (Custom "Stone & Amber" Coffee Theme)
+- **Backend / DB**: Firebase (Firestore, Auth, Storage)
+- **Icons**: Lucide React
+- **Runtime**: Bun
 
 ## 🚀 Getting Started
 
 ### Prerequisites
--   Bun (`curl -fsSL https://bun.sh/install | bash`)
--   Firebase Project
+
+- Bun (`curl -fsSL https://bun.sh/install | bash`)
+- Firebase Project
 
 ### Installation
 
 1.  Clone the repository:
+
     ```bash
     git clone https://github.com/RohiRIK/Personal-coffeshop.git
     cd Personal-coffeshop
     ```
 
 2.  Install dependencies:
+
     ```bash
     bun install
     ```
 
 3.  Set up Environment Variables:
     Create a `.env.local` file in the root:
+
     ```env
     NEXT_PUBLIC_FIREBASE_API_KEY=...
     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
@@ -62,9 +69,10 @@ The **Personal Coffeshop** is a modern, full-stack Order Management System (OMS)
 
 ## 📱 Screenshots
 
-| Customer Menu | Admin KDS |
-|:---:|:---:|
-| *(Add Screenshot)* | *(Add Screenshot)* |
+|   Customer Menu    |     Admin KDS      |
+| :----------------: | :----------------: |
+| _(Add Screenshot)_ | _(Add Screenshot)_ |
 
 ## 📄 License
+
 MIT

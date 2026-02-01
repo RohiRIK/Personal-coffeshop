@@ -11,12 +11,12 @@
   ::file-selector-button {
     border-color: var(--color-stone-700, currentColor);
   }
-  
+
   /* Always dark mode for coffee shop */
   html {
     color-scheme: dark;
   }
-  
+
   body {
     background-color: #1c1917; /* stone-900 */
     color: #fafaf9; /* stone-50 */

@@ -3,6 +3,7 @@
 ## Collections Structure
 
 ### 1. users Collection
+
 ```json
 {
   "userId": "string (auto-generated)",
@@ -20,6 +21,7 @@
 ```
 
 ### 2. menu_items Collection
+
 ```json
 {
   "itemId": "string (auto-generated)",
@@ -33,6 +35,7 @@
 ```
 
 ### 3. inventory Collection
+
 ```json
 {
   "inventoryId": "string (auto-generated)",
@@ -47,6 +50,7 @@
 ```
 
 ### 4. orders Collection
+
 ```json
 {
   "orderId": "string (auto-generated)",
@@ -67,6 +71,7 @@
 ```
 
 ### 5. ratings Collection
+
 ```json
 {
   "ratingId": "string (auto-generated)",
@@ -80,6 +85,7 @@
 ```
 
 ### 6. analytics Collection (Aggregated Data)
+
 ```json
 {
   "analyticsId": "string (auto-generated)",

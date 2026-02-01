@@ -31,6 +31,8 @@ export interface Order {
   status: "pending" | "preparing" | "ready" | "completed" | "cancelled";
   createdAt: Date;
   updatedAt?: Date;
+  rating?: number;
+  review?: string;
 }
 
 // User Types

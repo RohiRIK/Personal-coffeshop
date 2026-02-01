@@ -22,11 +22,14 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { RateOrderModal } from "components/orders/rate-order-modal";
+import { Star } from "lucide-react";
 
 export default function MyOrdersPage() {
   const { user, loading: authLoading } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const [ratingOrder, setRatingOrder] = useState<Order | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -54,6 +57,8 @@ export default function MyOrdersPage() {
           total: data.total,
           status: data.status,
           createdAt: data.createdAt?.toDate?.() || new Date(),
+          rating: data.rating,
+          review: data.review,
         };
         if (data.updatedAt) {
           order.updatedAt = data.updatedAt.toDate?.() || data.updatedAt;
@@ -144,7 +149,9 @@ export default function MyOrdersPage() {
                               {item.name}
                             </span>
                             <span className="text-stone-500 text-xs text block">
-                              {[item.milk, item.cup].filter(Boolean).join(", ")}
+                              {[item.milk, item.cup, item.sugar]
+                                .filter(Boolean)
+                                .join(", ")}
                             </span>
                           </div>
                         </div>
@@ -179,7 +186,7 @@ export default function MyOrdersPage() {
             {pastOrders.map((order) => (
               <div
                 key={order.id}
-                className="bg-stone-900/50 hover:bg-stone-900 transition-colors rounded-xl p-4 border border-stone-800 flex items-center justify-between group"
+                className="bg-stone-900/50 hover:bg-stone-900 transition-colors rounded-xl p-4 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between group gap-4"
               >
                 <div className="flex items-center gap-4">
                   <div className="w-10 h-10 rounded-full bg-stone-800 flex items-center justify-center text-stone-500">
@@ -196,7 +203,29 @@ export default function MyOrdersPage() {
                     </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-3">
+
+                <div className="flex items-center gap-3 sm:self-center self-end">
+                  {order.status === "completed" && !order.rating && (
+                    <button
+                      onClick={() => setRatingOrder(order)}
+                      className="text-xs font-bold text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 px-3 py-1.5 rounded-full transition-colors border border-amber-500/20"
+                    >
+                      Rate Order
+                    </button>
+                  )}
+                  {order.rating && (
+                    <div className="flex gap-0.5" title="You rated this order">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-3 h-3 ${i < order.rating!
+                            ? "fill-amber-500 text-amber-500"
+                            : "text-stone-700"
+                            }`}
+                        />
+                      ))}
+                    </div>
+                  )}
                   <StatusBadge status={order.status} size="small" />
                 </div>
               </div>
@@ -230,6 +259,16 @@ export default function MyOrdersPage() {
           </div>
         </section>
       </div>
+
+      {ratingOrder && (
+        <RateOrderModal
+          order={ratingOrder}
+          onClose={() => setRatingOrder(null)}
+          onRatingSubmit={() => {
+            // No need to refresh manually, onSnapshot will handle it
+          }}
+        />
+      )}
     </div>
   );
 }

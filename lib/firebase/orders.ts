@@ -180,3 +180,24 @@ export async function getOrder(orderId: string): Promise<Order | undefined> {
     return undefined;
   }
 }
+
+/**
+ * Rate an order
+ */
+export async function rateOrder(
+  orderId: string,
+  rating: number,
+  review?: string,
+): Promise<void> {
+  try {
+    const orderRef = doc(db, ORDERS_COLLECTION, orderId);
+    await updateDoc(orderRef, {
+      rating,
+      review: review || null,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error("Error rating order:", error);
+    throw error;
+  }
+}

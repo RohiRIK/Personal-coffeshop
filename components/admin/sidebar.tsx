@@ -41,13 +41,12 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
       {/* Sidebar */}
       <div
-        className={`w-64 bg-stone-900 border-r border-stone-800 flex flex-col h-screen fixed left-0 top-0 z-50 transform transition-transform duration-300 md:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`w-64 bg-stone-900 border-r border-stone-800 flex flex-col h-screen fixed left-0 top-0 z-50 transform transition-transform duration-300 md:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="p-6 flex items-center justify-between">
           <h1 className="text-xl font-bold">
-            <span className="text-amber-400">Personal Coffeshop</span>{" "}
+            <span className="text-amber-400">Personal Coffeshop</span>
             <span className="text-stone-100">Admin</span>
           </h1>
           <button
@@ -67,11 +66,10 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                 key={link.href}
                 href={link.href}
                 onClick={onClose}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                  isActive
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive
                     ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
                     : "text-stone-400 hover:bg-stone-800 hover:text-stone-100"
-                }`}
+                  }`}
               >
                 <Icon className="w-5 h-5" />
                 <span className="font-medium">{link.label}</span>

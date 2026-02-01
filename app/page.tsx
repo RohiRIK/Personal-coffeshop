@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getMenuItems } from "lib/firebase/menu";
 import type { MenuItem } from "lib/firebase/types";
 import Image from "next/image";
+import { Coffee } from "lucide-react";
 
 // Featured drinks section
 function FeaturedDrinks({ items }: { items: MenuItem[] }) {
@@ -30,9 +31,8 @@ function FeaturedDrinks({ items }: { items: MenuItem[] }) {
 
                 {/* Tag badge */}
                 <div
-                  className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold ${
-                    item.tag === "Hot" ? "bg-orange-500" : "bg-blue-500"
-                  }`}
+                  className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold ${item.tag === "Hot" ? "bg-orange-500" : "bg-blue-500"
+                    }`}
                 >
                   {item.tag}
                 </div>
@@ -86,9 +86,9 @@ function Hero() {
       />
 
       <div className="relative z-10 text-center px-4">
-        <h1 className="text-5xl md:text-7xl font-bold mb-6">
-          <span className="text-amber-400">Personal Coffeshop</span>{" "}
-          <span className="text-stone-100">Coffee</span>
+        <h1 className="text-5xl md:text-7xl font-bold mb-6 flex items-center justify-center gap-4 flex-wrap">
+          <span className="text-amber-400">Personal Coffeshop</span>
+          <Coffee className="w-12 h-12 md:w-20 md:h-20 text-amber-500" />
         </h1>
         <p className="text-xl md:text-2xl text-stone-300 mb-4 max-w-2xl mx-auto">
           Hand-crafted beverages made with love, served in our cozy home café

@@ -46,7 +46,7 @@ export default function AdminLayout({
           <Menu className="w-6 h-6" />
         </button>
         <h1 className="text-lg font-bold">
-          <span className="text-amber-400">Personal Coffeshop</span>{" "}
+          <span className="text-amber-400">Personal Coffeshop</span>
           <span className="text-stone-100">Admin</span>
         </h1>
       </div>

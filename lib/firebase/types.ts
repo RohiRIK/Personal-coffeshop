@@ -18,6 +18,7 @@ export interface OrderItem {
   quantity: number;
   milk?: string;
   cup?: string;
+  sugar?: string;
   specialInstructions?: string;
 }
 

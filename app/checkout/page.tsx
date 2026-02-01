@@ -49,20 +49,21 @@ export default function CheckoutPage() {
         quantity: item.quantity,
         milk: item.options.milk || undefined,
         cup: item.options.cup || undefined,
+        sugar: item.options.sugar || undefined,
         specialInstructions: item.options.instructions || undefined,
       }));
 
-      await createOrder(
+      const orderId = await createOrder(
         user.uid,
         user.displayName || user.email || "Guest",
         orderItems,
       );
 
       clearCart();
-      toast.success("Order placed successfully! Please pay at the counter.");
+      toast.success("Order placed successfully!");
 
-      // Navigate to home or order history (future)
-      router.push("/");
+      // Navigate to success page with order ID
+      router.push(`/order-success?orderId=${orderId}`);
     } catch (error) {
       console.error("Checkout error:", error);
       toast.error("Failed to place order. Please try again.");
@@ -122,7 +123,8 @@ export default function CheckoutPage() {
                         {item.options.milk && (
                           <span>{item.options.milk} • </span>
                         )}
-                        {item.options.cup && <span>{item.options.cup}</span>}
+                        {item.options.cup && <span>{item.options.cup} • </span>}
+                        {item.options.sugar && <span>{item.options.sugar}</span>}
                         {item.options.instructions && (
                           <div className="italic mt-0.5">
                             "{item.options.instructions}"

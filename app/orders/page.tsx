@@ -212,91 +212,90 @@ export default function MyOrdersPage() {
               className="bg-stone-900/50 hover:bg-stone-900 transition-colors rounded-xl p-4 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between group gap-4"
             >
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-stone-800 shrink-0 overflow-hidden relative border border-stone-700">
-                    {order.items[0]?.imageUrl ? (
-                      <Image
-                        src={order.items[0].imageUrl}
-                        alt={order.items[0].name}
-                        fill
-                        className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-stone-500">
-                        <Coffee className="w-6 h-6" />
-                      </div>
-                    )}
-                    {order.items.length > 1 && (
-                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-xs font-bold backdrop-blur-[1px]">
-                        +{order.items.length - 1}
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <div className="font-bold text-stone-200 text-sm">
-                      {order.items.map((i) => i.name).join(", ")}
+                <div className="w-12 h-12 rounded-xl bg-stone-800 shrink-0 overflow-hidden relative border border-stone-700">
+                  {order.items[0]?.imageUrl ? (
+                    <Image
+                      src={order.items[0].imageUrl}
+                      alt={order.items[0].name}
+                      fill
+                      className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-stone-500">
+                      <Coffee className="w-6 h-6" />
                     </div>
-                    <div className="text-xs text-stone-500 flex items-center gap-2">
-                      <span>{format(order.createdAt, "MMM d, h:mm a")}</span>
-                      <span>•</span>
-                      <span>${order.total.toFixed(2)}</span>
+                  )}
+                  {order.items.length > 1 && (
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-xs font-bold backdrop-blur-[1px]">
+                      +{order.items.length - 1}
                     </div>
-                  </div>
+                  )}
                 </div>
-
-                <div className="flex items-center gap-3 sm:self-center self-end">
-                  {order.status === "completed" && !order.rating && (
-                    <button
-                      onClick={() => setRatingOrder(order)}
-                      className="text-xs font-bold text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 px-3 py-1.5 rounded-full transition-colors border border-amber-500/20"
-                    >
-                      Rate Order
-                    </button>
-                  )}
-                  {order.rating && (
-                    <div className="flex gap-0.5" title="You rated this order">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`w-3 h-3 ${i < order.rating!
-                            ? "fill-amber-500 text-amber-500"
-                            : "text-stone-700"
-                            }`}
-                        />
-                      ))}
-                    </div>
-                  )}
-                  <StatusBadge status={order.status} size="small" />
+                <div>
+                  <div className="font-bold text-stone-200 text-sm">
+                    {order.items.map((i) => i.name).join(", ")}
+                  </div>
+                  <div className="text-xs text-stone-500 flex items-center gap-2">
+                    <span>{format(order.createdAt, "MMM d, h:mm a")}</span>
+                    <span>•</span>
+                    <span>${order.total.toFixed(2)}</span>
+                  </div>
                 </div>
               </div>
+
+              <div className="flex items-center gap-3 sm:self-center self-end">
+                {order.status === "completed" && !order.rating && (
+                  <button
+                    onClick={() => setRatingOrder(order)}
+                    className="text-xs font-bold text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 px-3 py-1.5 rounded-full transition-colors border border-amber-500/20"
+                  >
+                    Rate Order
+                  </button>
+                )}
+                {order.rating && (
+                  <div className="flex gap-0.5" title="You rated this order">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3 h-3 ${i < order.rating!
+                          ? "fill-amber-500 text-amber-500"
+                          : "text-stone-700"
+                          }`}
+                      />
+                    ))}
+                  </div>
+                )}
+                <StatusBadge status={order.status} size="small" />
+              </div>
+            </div>
           ))}
 
-              {pastOrders.length === 0 && orders.length > 0 && (
-                <div className="text-stone-500 italic text-sm text-center py-8 bg-stone-900/30 rounded-xl">
-                  No past orders yet.
-                </div>
-              )}
-
-              {orders.length === 0 && (
-                <div className="text-center py-12">
-                  <div className="w-16 h-16 bg-stone-900 rounded-full flex items-center justify-center mx-auto mb-4 text-stone-600">
-                    <Package className="w-8 h-8 scale-x-[-1]" />
-                  </div>
-                  <h3 className="text-lg font-bold text-stone-300 mb-2">
-                    No orders yet
-                  </h3>
-                  <p className="text-stone-500 mb-6 max-w-xs mx-auto">
-                    Looks like you haven't tried our delicious coffee yet!
-                  </p>
-                  <Link
-                    href="/menu"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-xl transition-colors"
-                  >
-                    Browse Menu <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              )}
+          {pastOrders.length === 0 && orders.length > 0 && (
+            <div className="text-stone-500 italic text-sm text-center py-8 bg-stone-900/30 rounded-xl">
+              No past orders yet.
             </div>
+          )}
+
+          {orders.length === 0 && (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-stone-900 rounded-full flex items-center justify-center mx-auto mb-4 text-stone-600">
+                <Package className="w-8 h-8 scale-x-[-1]" />
+              </div>
+              <h3 className="text-lg font-bold text-stone-300 mb-2">
+                No orders yet
+              </h3>
+              <p className="text-stone-500 mb-6 max-w-xs mx-auto">
+                Looks like you haven't tried our delicious coffee yet!
+              </p>
+              <Link
+                href="/menu"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-xl transition-colors"
+              >
+                Browse Menu <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          )}
+        </div>
       </section>
 
       {ratingOrder && (

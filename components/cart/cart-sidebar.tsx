@@ -32,9 +32,8 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-stone-900 border-l border-stone-700 z-50 transform transition-transform duration-300 ease-in-out shadow-2xl flex flex-col ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-stone-900 border-l border-stone-700 z-50 transform transition-transform duration-300 ease-in-out shadow-2xl flex flex-col ${isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         <div className="p-4 border-b border-stone-800 flex items-center justify-between">
           <h2 className="text-xl font-bold text-stone-100">Your Order</h2>
@@ -97,6 +96,7 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                   <div className="text-xs text-stone-400 space-y-0.5 mb-3">
                     {item.options.milk && <p>Milk: {item.options.milk}</p>}
                     {item.options.cup && <p>Cup: {item.options.cup}</p>}
+                    {item.options.sugar && <p>Sugar: {item.options.sugar}</p>}
                     {item.options.instructions && (
                       <p className="italic truncated">
                         "{item.options.instructions}"

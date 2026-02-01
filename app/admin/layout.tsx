@@ -2,8 +2,9 @@
 
 import { useAuth } from "contexts/auth-context";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AdminSidebar } from "components/admin/sidebar";
+import { Menu } from "lucide-react";
 
 export default function AdminLayout({
   children,
@@ -12,6 +13,7 @@ export default function AdminLayout({
 }) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     // Basic auth check - in production we'd check user.role === 'admin'
@@ -34,9 +36,26 @@ export default function AdminLayout({
   if (!user) return null;
 
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 pl-64">
-      <AdminSidebar />
-      <main className="p-8">{children}</main>
+    <div className="min-h-screen bg-stone-950 text-stone-100">
+      {/* Mobile Header */}
+      <div className="md:hidden sticky top-0 z-30 bg-stone-900 border-b border-stone-800 px-4 py-3 flex items-center gap-4">
+        <button
+          onClick={() => setSidebarOpen(true)}
+          className="p-2 text-stone-300 hover:text-amber-400 transition-colors"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+        <h1 className="text-lg font-bold">
+          <span className="text-amber-400">Personal Coffeshop</span>{" "}
+          <span className="text-stone-100">Admin</span>
+        </h1>
+      </div>
+
+      <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      {/* Main Content - offset for sidebar on desktop */}
+      <main className="md:pl-64 p-4 md:p-8">{children}</main>
     </div>
   );
 }
+

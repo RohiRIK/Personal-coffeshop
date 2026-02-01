@@ -5,30 +5,34 @@ import { useState } from "react";
 import { UserMenu } from "components/auth/user-menu";
 import { CartSidebar } from "components/cart/cart-sidebar";
 import { useCart } from "contexts/cart-context";
+import { Menu, X, Coffee, ClipboardList, ShoppingBag } from "lucide-react";
 
 export function Navbar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { count } = useCart();
 
   return (
     <>
       <nav className="sticky top-0 z-50 bg-stone-900/95 backdrop-blur-sm border-b border-stone-800">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+          {/* Logo */}
           <Link href="/" className="text-xl font-bold">
             <span className="text-amber-400">Personal Coffeshop</span>{" "}
-            <span className="text-stone-100">Coffee</span>
+            <span className="text-stone-100 hidden sm:inline">Coffee</span>
           </Link>
 
-          <div className="flex items-center gap-4 sm:gap-6">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-6">
             <Link
               href="/menu"
-              className="text-stone-300 hover:text-amber-400 text-sm font-medium transition-colors hidden sm:block"
+              className="text-stone-300 hover:text-amber-400 text-sm font-medium transition-colors"
             >
               Menu
             </Link>
             <Link
               href="/orders"
-              className="text-stone-300 hover:text-amber-400 text-sm font-medium transition-colors hidden sm:block"
+              className="text-stone-300 hover:text-amber-400 text-sm font-medium transition-colors"
             >
               My Orders
             </Link>
@@ -37,19 +41,7 @@ export function Navbar() {
               onClick={() => setIsCartOpen(true)}
               className="relative p-2 text-stone-300 hover:text-amber-400 transition-colors"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                />
-              </svg>
+              <ShoppingBag className="w-6 h-6" />
               {count > 0 && (
                 <span className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-stone-900 text-xs font-bold rounded-full flex items-center justify-center">
                   {count}
@@ -59,10 +51,64 @@ export function Navbar() {
 
             <UserMenu />
           </div>
+
+          {/* Mobile Navigation */}
+          <div className="flex md:hidden items-center gap-2">
+            <button
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 text-stone-300 hover:text-amber-400 transition-colors"
+            >
+              <ShoppingBag className="w-6 h-6" />
+              {count > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-amber-500 text-stone-900 text-xs font-bold rounded-full flex items-center justify-center">
+                  {count}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 text-stone-300 hover:text-amber-400 transition-colors"
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t border-stone-800 bg-stone-900">
+            <div className="px-4 py-4 space-y-3">
+              <Link
+                href="/menu"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-lg text-stone-300 hover:bg-stone-800 hover:text-amber-400 transition-colors"
+              >
+                <Coffee className="w-5 h-5" />
+                Menu
+              </Link>
+              <Link
+                href="/orders"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-lg text-stone-300 hover:bg-stone-800 hover:text-amber-400 transition-colors"
+              >
+                <ClipboardList className="w-5 h-5" />
+                My Orders
+              </Link>
+              <div className="pt-3 border-t border-stone-800">
+                <UserMenu />
+              </div>
+            </div>
+          </div>
+        )}
       </nav>
 
       <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </>
   );
 }
+

@@ -119,14 +119,14 @@ export function CustomizationForm({
       {/* Sugar Level */}
       <div>
         <h3 className="text-lg font-bold text-stone-100 mb-3">Sugar Level</h3>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
           {SUGAR_OPTIONS.map((sugar) => (
             <button
               key={sugar.id}
               onClick={() => setSelectedSugar(sugar.id)}
               className={`p-3 rounded-lg border-2 transition-all duration-200 text-center ${selectedSugar === sugar.id
-                  ? "border-amber-500 bg-amber-500/20 text-amber-400"
-                  : "border-stone-700 bg-stone-800 text-stone-300 hover:border-stone-600 hover:bg-stone-700"
+                ? "border-amber-500 bg-amber-500/20 text-amber-400"
+                : "border-stone-700 bg-stone-800 text-stone-300 hover:border-stone-600 hover:bg-stone-700"
                 }`}
             >
               <span className="flex justify-center gap-0.5 mb-1">
@@ -137,8 +137,8 @@ export function CustomizationForm({
                     <span
                       key={i}
                       className={`w-2 h-2 rounded-full ${selectedSugar === sugar.id
-                          ? "bg-amber-400"
-                          : "bg-stone-500"
+                        ? "bg-amber-400"
+                        : "bg-stone-500"
                         }`}
                     />
                   ))

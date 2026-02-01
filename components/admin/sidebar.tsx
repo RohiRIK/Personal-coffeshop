@@ -10,9 +10,15 @@ import {
   Users,
   Home,
   LogOut,
+  X,
 } from "lucide-react";
 
-export function AdminSidebar() {
+interface AdminSidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const { signOut } = useAuth();
 
@@ -24,51 +30,72 @@ export function AdminSidebar() {
   ];
 
   return (
-    <div className="w-64 bg-stone-900 border-r border-stone-800 flex flex-col h-screen fixed left-0 top-0">
-      <div className="p-6">
-        <h1 className="text-xl font-bold">
-          <span className="text-amber-400">Personal Coffeshop</span>{" "}
-          <span className="text-stone-100">Admin</span>
-        </h1>
-      </div>
+    <>
+      {/* Mobile Backdrop */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 z-40 md:hidden"
+          onClick={onClose}
+        />
+      )}
 
-      <nav className="flex-1 px-4 space-y-2">
-        {links.map((link) => {
-          const isActive = pathname.startsWith(link.href);
-          const Icon = link.icon;
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                isActive
-                  ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                  : "text-stone-400 hover:bg-stone-800 hover:text-stone-100"
-              }`}
-            >
-              <Icon className="w-5 h-5" />
-              <span className="font-medium">{link.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+      {/* Sidebar */}
+      <div
+        className={`w-64 bg-stone-900 border-r border-stone-800 flex flex-col h-screen fixed left-0 top-0 z-50 transform transition-transform duration-300 md:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+      >
+        <div className="p-6 flex items-center justify-between">
+          <h1 className="text-xl font-bold">
+            <span className="text-amber-400">Personal Coffeshop</span>{" "}
+            <span className="text-stone-100">Admin</span>
+          </h1>
+          <button
+            onClick={onClose}
+            className="md:hidden p-2 text-stone-400 hover:text-stone-100"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
-      <div className="p-4 border-t border-stone-800">
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-4 py-3 text-stone-400 hover:text-stone-100 transition-colors mb-2"
-        >
-          <Home className="w-5 h-5" />
-          <span>Back to App</span>
-        </Link>
-        <button
-          onClick={() => signOut()}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-stone-100 transition-colors font-medium"
-        >
-          <LogOut className="w-4 h-4" />
-          <span>Sign Out</span>
-        </button>
+        <nav className="flex-1 px-4 space-y-2">
+          {links.map((link) => {
+            const isActive = pathname.startsWith(link.href);
+            const Icon = link.icon;
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={onClose}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive
+                    ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                    : "text-stone-400 hover:bg-stone-800 hover:text-stone-100"
+                  }`}
+              >
+                <Icon className="w-5 h-5" />
+                <span className="font-medium">{link.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="p-4 border-t border-stone-800">
+          <Link
+            href="/"
+            className="flex items-center gap-3 px-4 py-3 text-stone-400 hover:text-stone-100 transition-colors mb-2"
+          >
+            <Home className="w-5 h-5" />
+            <span>Back to App</span>
+          </Link>
+          <button
+            onClick={() => signOut()}
+            className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-stone-800 text-stone-300 hover:bg-stone-700 hover:text-stone-100 transition-colors font-medium"
+          >
+            <LogOut className="w-4 h-4" />
+            <span>Sign Out</span>
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
+

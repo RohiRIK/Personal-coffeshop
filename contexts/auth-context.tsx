@@ -15,6 +15,7 @@ import {
   signUp,
   signOut,
   signInWithGoogle,
+  resetPassword,
 } from "lib/firebase/auth";
 import type { User } from "lib/firebase/types";
 
@@ -30,6 +31,7 @@ interface AuthContextType {
   ) => Promise<User | null>;
   signInWithGoogle: () => Promise<User | null>;
   signOut: () => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -81,6 +83,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  const handleResetPassword = async (email: string) => {
+    await resetPassword(email);
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -91,6 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signUp: handleSignUp,
         signInWithGoogle: handleSignInWithGoogle,
         signOut: handleSignOut,
+        resetPassword: handleResetPassword,
       }}
     >
       {children}

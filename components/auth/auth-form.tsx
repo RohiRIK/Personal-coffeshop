@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "contexts/auth-context";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Coffee, Settings } from "lucide-react";
+import { Coffee, Settings, Mail } from "lucide-react";
 
 interface AuthFormProps {
   mode?: "login" | "signup";
@@ -22,11 +22,30 @@ export function AuthForm({
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmailSent, setResetEmailSent] = useState(false);
 
-  const { user, signIn, signUp, signInWithGoogle } = useAuth();
+  const { user, signIn, signUp, signInWithGoogle, resetPassword } = useAuth();
   const router = useRouter();
 
   const getRedirectPath = () => (loginType === "admin" ? "/admin" : "/menu");
+
+  const handleForgotPassword = async () => {
+    if (!email) {
+      setError("Please enter your email address first");
+      return;
+    }
+    setError("");
+    setLoading(true);
+    try {
+      await resetPassword(email);
+      setResetEmailSent(true);
+    } catch (err: any) {
+      setError(err.message || "Failed to send reset email");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // If user is already logged in, show options
   if (user) {
@@ -102,11 +121,10 @@ export function AuthForm({
         <button
           type="button"
           onClick={() => setLoginType("guest")}
-          className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
-            loginType === "guest"
-              ? "bg-amber-500 text-stone-900"
-              : "text-stone-400 hover:text-stone-200"
-          }`}
+          className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${loginType === "guest"
+            ? "bg-amber-500 text-stone-900"
+            : "text-stone-400 hover:text-stone-200"
+            }`}
         >
           <Coffee className="w-4 h-4" />
           Shop
@@ -114,11 +132,10 @@ export function AuthForm({
         <button
           type="button"
           onClick={() => setLoginType("admin")}
-          className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
-            loginType === "admin"
-              ? "bg-amber-500 text-stone-900"
-              : "text-stone-400 hover:text-stone-200"
-          }`}
+          className={`flex-1 py-2.5 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${loginType === "admin"
+            ? "bg-amber-500 text-stone-900"
+            : "text-stone-400 hover:text-stone-200"
+            }`}
         >
           <Settings className="w-4 h-4" />
           Admin
@@ -209,7 +226,24 @@ export function AuthForm({
             required
             minLength={6}
           />
+          {mode === "login" && (
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              disabled={loading}
+              className="mt-2 text-sm text-amber-400 hover:text-amber-300 transition-colors disabled:opacity-50"
+            >
+              Forgot password?
+            </button>
+          )}
         </div>
+
+        {resetEmailSent && (
+          <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/50 text-green-400 text-sm flex items-center gap-2">
+            <Mail className="w-4 h-4" />
+            Password reset email sent! Check your inbox.
+          </div>
+        )}
 
         {error && (
           <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/50 text-red-400 text-sm">

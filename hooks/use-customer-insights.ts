@@ -78,7 +78,7 @@ export function useCustomerInsights(userId: string | undefined) {
           favoriteDrink: getTop(drinkCounts),
           favoriteMilk: getTop(milkCounts),
           lastOrderDate: orders[0]?.createdAt || null,
-          isVip: totalSpent > 50, // Arbitrary VIP threshold
+          isVip: orderCount >= 10,
         });
       } catch (error) {
         console.error("Error fetching customer insights:", error);

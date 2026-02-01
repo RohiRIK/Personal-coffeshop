@@ -7,6 +7,7 @@ import {
   onSnapshot,
   query,
   increment,
+  where,
 } from "firebase/firestore";
 import { db } from "./index";
 import { MILK_OPTIONS, CUP_OPTIONS } from "../constants";
@@ -92,11 +93,16 @@ export async function deductInventory(items: any[]): Promise<void> {
     items.forEach((item) => {
       // 1. Milk
       if (item.milk) {
-        deductions[item.milk] = (deductions[item.milk] || 0) + item.quantity;
+        // Map Name back to ID
+        const milkOption = MILK_OPTIONS.find(m => m.name === item.milk);
+        const milkId = milkOption?.id || item.milk.toLowerCase(); // Fallback
+        deductions[milkId] = (deductions[milkId] || 0) + item.quantity;
       }
       // 2. Cup
       if (item.cup) {
-        deductions[item.cup] = (deductions[item.cup] || 0) + item.quantity;
+        const cupOption = CUP_OPTIONS.find(c => c.name === item.cup);
+        const cupId = cupOption?.id || item.cup.toLowerCase();
+        deductions[cupId] = (deductions[cupId] || 0) + item.quantity;
       }
       // 3. Sugar
       if (item.sugar && item.sugar !== "none") {
@@ -110,25 +116,16 @@ export async function deductInventory(items: any[]): Promise<void> {
 
     // Execute atomic updates
     const updates = Object.entries(deductions).map(async ([id, amount]) => {
+      if (!id) return; // Skip invalid
       const itemRef = doc(db, INVENTORY_COLLECTION, id);
 
-      // We need to check current stock to auto-disable if it hits 0
-      // But for atomic updates without transaction read, we'll just decrement.
-      // To strictly disable on 0, we'd need a transaction.
-      // For now, let's just decrement. Ideally, we have a trigger or a separate check.
-
-      // Let's stick to simple decrement. The UI shows "Out of Stock" (Red) anyway.
-      // If we want to force "available: false", we can do it, but "available" might mean "on the menu"
-      // regardless of stock? No, usually it means "can be ordered".
-
-      // Let's IMPROVE it: Read, then update.
-      const itemSnap = await getDocs(query(collection(db, INVENTORY_COLLECTION), where("id", "==", id))); // Ineffecient
-      // Actually, we can just use runTransaction for deduction logic if we want to be safe.
-      // But keeping it simple as I don't want to rewrite the whole function structure now.
-
-      await updateDoc(itemRef, {
-        quantity: increment(-amount),
-      });
+      try {
+        await updateDoc(itemRef, {
+          quantity: increment(-amount),
+        });
+      } catch (e) {
+        console.error(`Failed to update inventory for ${id}:`, e);
+      }
     });
 
     await Promise.all(updates);

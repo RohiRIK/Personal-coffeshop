@@ -44,8 +44,21 @@ export default function MyOrdersPage() {
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const userOrders: Order[] = [];
-      snapshot.forEach((doc) => {
-        userOrders.push({ id: doc.id, ...doc.data() } as Order);
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const order: Order = {
+          id: docSnap.id,
+          userId: data.userId,
+          userName: data.userName,
+          items: data.items,
+          total: data.total,
+          status: data.status,
+          createdAt: data.createdAt?.toDate?.() || new Date(),
+        };
+        if (data.updatedAt) {
+          order.updatedAt = data.updatedAt.toDate?.() || data.updatedAt;
+        }
+        userOrders.push(order);
       });
       setOrders(userOrders);
       setLoading(false);

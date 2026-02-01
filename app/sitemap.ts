@@ -4,8 +4,6 @@ import { getMenuItems } from "lib/firebase/menu";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const menuItems = await getMenuItems();
-
   // Static routes
   const staticRoutes = [
     {
@@ -18,11 +16,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic drink routes
-  const drinkRoutes = menuItems.map((item) => ({
-    url: `${baseUrl}/drink/${item.id}`,
-    lastModified: new Date(),
-  }));
+  // Try to get dynamic drink routes, but gracefully handle errors (e.g., in CI without Firebase credentials)
+  let drinkRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const menuItems = await getMenuItems();
+    drinkRoutes = menuItems.map((item) => ({
+      url: `${baseUrl}/drink/${item.id}`,
+      lastModified: new Date(),
+    }));
+  } catch (error) {
+    console.warn("Could not fetch menu items for sitemap:", error);
+  }
 
   return [...staticRoutes, ...drinkRoutes];
 }

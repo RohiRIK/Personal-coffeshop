@@ -1,4 +1,17 @@
 import type { NextConfig } from "next";
+import withPWAInit from "@ducanh2912/next-pwa";
+
+const withPWA = withPWAInit({
+  dest: "public",
+  cacheOnFrontEndNav: true,
+  aggressiveFrontEndNavCaching: true,
+  reloadOnOnline: true,
+
+  disable: process.env.NODE_ENV === "development",
+  workboxOptions: {
+    disableDevLogs: true,
+  },
+});
 
 const config: NextConfig = {
   output: "standalone",
@@ -20,12 +33,12 @@ const config: NextConfig = {
         protocol: "https",
         hostname: "picsum.photos",
       },
-      // Google encrypted images (for some menu items)
+      // Google encrypted images
       {
         protocol: "https",
         hostname: "encrypted-tbn0.gstatic.com",
       },
-      // thehungrybites (freddo espresso)
+      // thehungrybites
       {
         protocol: "https",
         hostname: "www.thehungrybites.com",
@@ -35,37 +48,37 @@ const config: NextConfig = {
         protocol: "https",
         hostname: "firebasestorage.googleapis.com",
       },
-      // Equator Coffees (moka pot)
+      // Equator Coffees
       {
         protocol: "https",
         hostname: "www.equatorcoffees.com",
       },
-      // Colombian Coffee (turkish coffee)
+      // Colombian Coffee
       {
         protocol: "https",
         hostname: "colombiancoffee.us",
       },
-      // Laura Fuentes (hot mocha)
+      // Laura Fuentes
       {
         protocol: "https",
         hostname: "www.laurafuentes.com",
       },
-      // Easy Weeknight Recipes (iced mocha)
+      // Easy Weeknight Recipes
       {
         protocol: "https",
         hostname: "easyweeknightrecipes.com",
       },
-      // Simply Recipes (affogato)
+      // Simply Recipes
       {
         protocol: "https",
         hostname: "www.simplyrecipes.com",
       },
-      // Coffee Kev (cortado)
+      // Coffee Kev
       {
         protocol: "https",
         hostname: "coffeekev.com",
       },
-      // Cookhouse Diary (chai latte)
+      // Cookhouse Diary
       {
         protocol: "https",
         hostname: "cookhousediary.com",
@@ -74,4 +87,4 @@ const config: NextConfig = {
   },
 };
 
-export default config;
+export default withPWA(config);

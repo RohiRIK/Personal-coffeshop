@@ -75,10 +75,10 @@ export const CUP_OPTIONS = [
 
 // Sugar level options
 export const SUGAR_OPTIONS = [
-  { id: "none", name: "No Sugar", icon: "🚫" },
-  { id: "light", name: "Light", icon: "🍬" },
-  { id: "normal", name: "Normal", icon: "🍬🍬" },
-  { id: "extra", name: "Extra", icon: "🍬🍬🍬" },
+  { id: "none", name: "No Sugar", level: 0 },
+  { id: "light", name: "Light", level: 1 },
+  { id: "normal", name: "Normal", level: 2 },
+  { id: "extra", name: "Extra", level: 3 },
 ];
 
 // Order statuses

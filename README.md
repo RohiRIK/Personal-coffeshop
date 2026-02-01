@@ -1,97 +1,125 @@
-# ☕ Personal Coffeshop (v2)
+# ☕ Personal Coffeshop
 
-The **Personal Coffeshop** is a passion project born from a simple desire: **to be the ultimate host.**
+![Next.js 15](https://img.shields.io/badge/Next.js_15-black?style=for-the-badge&logo=next.js&logoColor=white) 
+![Bun](https://img.shields.io/badge/Bun-Run_Dev-fbf0df?style=for-the-badge&logo=bun&logoColor=black) 
+![Firebase](https://img.shields.io/badge/Firebase-Realtime-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
+![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
-With a move to a new house on the horizon, I wanted to create a system that lets my friends—connected to my Wi-Fi—order their favorite coffee exactly how they like it, directly from their phones. It transforms my home kitchen into a streamlined café, allowing me to focus on crafting the perfect cup rather than remembering who wanted oat milk.
+<br />
 
-## ✨ Features
+<div align="center">
+  <img src="public/icon.png" width="100" height="100" style="border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.5);" />
+  <h1>The Ultimate Home Host Experience</h1>
+  <p><em>A seamless Order Management & Kitchen Display System for the modern home café.</em></p>
+</div>
 
-### 👤 Customer Experience
+<br />
 
-- **Menu & Customization**: Browse drinks with rich visuals, filters, and customize options (milk, cup, notes).
-- **Cart System**: Persistent local cart with real-time totals.
-- **User Accounts**: Order history tracking, favorite items analysis, and "My Orders" status tracking.
-- **Live Updates**: Watch your order go from _Pending_ → _Preparing_ → _Ready_ instantly.
+> ### 🏡 The Passion Project
+> *"The Personal Coffeshop is born from a simple desire: **to be the ultimate host.** With a move to a new house on the horizon, I wanted a system that lets my friends—connected to my Wi-Fi—order their favorite coffee exactly how they like it.  It transforms my kitchen into a streamlined café, allowing me to focus on crafting the perfect cup rather than remembering who wanted oat milk."*
 
-### 👔 Admin Dashboard (Kitchen Display)
+---
 
-- **Live Order Queue**: A high-density KDS (Kitchen Display System) to manage incoming orders.
-- **Status Control**: One-click status updates (Pending → Preparing → Ready → Completed).
-- **Menu Management**: Reactively toggle item availability (Sold Out) and manage prices.
-- **Inventory Management**: Real-time stock control for modifiers (Milk, Cups).
-- **Customer Insights**: View "VIP" status, total spend, and favorite drinks directly in the order ticket.
-- **📱 PWA Ready**: Installable on iOS/Android with offline support and app-like experience.
+## 📸 The Experience
 
-### 🐳 Deployment
+### 1. The Guest Experience
+*Friends scan a QR code (or browse to your local IP) and land on a beautiful, app-like menu.*
 
-- **Docker**: Containerized with optimized `oven/bun:alpine` image.
-- **GHCR**: Automated builds pushed to GitHub Container Registry.
+| **Browsing the Menu** | **Customizing the Drink** |
+|:---:|:---:|
+| <img src="assets/Shop.png" width="250" alt="Shop"/> | <img src="assets/Customization-drinks.png" width="250" alt="Customization"/> |
 
-## 🛠️ Tech Stack
+| **Reviewing the Cart** | **Order Success** |
+|:---:|:---:|
+| <img src="assets/Cart.png" width="250" alt="Cart"/> | <img src="assets/Order-Placed!.png" width="250" alt="Success"/> |
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS (Custom "Stone & Amber" Coffee Theme)
-- **Backend / DB**: Firebase (Firestore, Auth, Storage)
-- **Icons**: Lucide React
-- **Runtime**: Bun
+### 2. The Host Experience (Barista Mode)
+*I receive orders in real-time on my kitchen display.*
+
+<div align="center">
+  <img src="assets/Admin-portal.png" alt="Admin Portal" width="800" style="border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"/>
+  <p><em>Real-time Kitchen Display System (KDS) showing incoming orders, modifiers, and "VIP" status.</em></p>
+</div>
+
+---
+
+## 🛠️ The "Host-First" Architecture
+
+Most POS systems are built for profit; this one is built for **hospitality**.
+
+*   **⚡ Zero Latency Performance:** Powered by **[Bun](https://bun.sh/)** and **[Next.js 15](https://nextjs.org/)** (App Router) for near-instant server-side rendering and static delivery.
+*   **📡 Real-time Synchronization:** Leveraging **Firestore snapshots** for a "no-refresh" experience. When you click "Preparing" in the kitchen, your friend's phone vibrates in the living room instantly.
+*   **📱 PWA Implementation:** Optimized meta tags and manifest allow guests to "Install" the app on their phone for a native feel without an app store download.
+*   **🎨 Adaptive Design:** The Guest view is mobile-first, while the Admin Dashboard is optimized for an iPad mounted on the kitchen wall (KDS style).
+
+## ✨ Features Comparison
+
+| Feature | Guest App (Friend) | Admin Dashboard (Host) |
+| :--- | :--- | :--- |
+| **Real-time Updates** | Tracks Order Status (Pending → Ready) | Instant Ticket Arrival 🔔 |
+| **Persistence** | LocalStorage Cart (Resume later) | Firestore State Sync |
+| **Data Usage** | Minimal (Static Assets Cached) | High Density Grid View |
+| **Authentication** | Anonymous / Guest Logic | Secure Admin Login |
+
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Bun (`curl -fsSL https://bun.sh/install | bash`)
-- Firebase Project
+*   **Bun**: `curl -fsSL https://bun.sh/install | bash`
+*   **Firebase Project**: Authentication (Email + Anonymous), Firestore.
 
-### Installation
+### 1. Installation
 
-1.  Clone the repository:
+```bash
+git clone https://github.com/RohiRIK/Personal-coffeshop.git
+cd Personal-coffeshop
+bun install
+```
 
-    ```bash
-    git clone https://github.com/RohiRIK/Personal-coffeshop.git
-    cd Personal-coffeshop
-    ```
+### 2. Environment Setup
 
-2.  Install dependencies:
+Create `.env.local` using your Firebase config:
 
-    ```bash
-    bun install
-    ```
+```env
+NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSy...
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+...
+```
 
-3.  Set up Environment Variables:
-    Create a `.env.local` file in the root:
+### 3. Database Schema (Firestore)
 
-    ```env
-    NEXT_PUBLIC_FIREBASE_API_KEY=...
-    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
-    NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
-    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=...
-    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
-    NEXT_PUBLIC_FIREBASE_APP_ID=...
-    ```
+You need to create these collections or run the seed script (coming soon).
 
-4.  Run Development Server:
-    ```bash
-    bun run dev
-    ```
+*   **`menu`**: Documents with fields `{ name, price, description, category, available (bool), imageUrl }`
+*   **`orders`**: Stores the transactions.
+*   **`users`**: Stores user profiles and VIP stats.
+*   **`inventory`**: `{ id: "milk_whole", stock: 100 }`
 
-## 📱 Screenshots
+### 4. Running for Guests (Local Wi-Fi) 📡
 
-### Customer Journey
+To let friends access the app, you need to run it on your **local IP address**.
 
-|     **Menu & Shop**      |               **Customization**               |
-| :----------------------: | :-------------------------------------------: |
-| ![Shop](assets/Shop.png) | ![Customize](assets/Customization-drinks.png) |
+```bash
+bun run dev --host 0.0.0.0
+```
 
-|         **Cart**         |             **Success**              |
-| :----------------------: | :----------------------------------: |
-| ![Cart](assets/Cart.png) | ![Success](assets/Order-Placed!.png) |
+1.  Find your computer's IP (e.g., `ifconfig` -> `192.168.1.5`).
+2.  Tell friends to visit `http://192.168.1.5:3000`.
+3.  **Pro Tip**: Generate a QR code for this URL and print it out!
 
-### Admin Dashboard
+---
 
-![Admin Portal](assets/Admin-portal.png)
-_Real-time Kitchen Display System (KDS)_
+## 🔮 Future Roadmap
+
+*   🖨️ **Thermal Printer Integration**: Auto-print receipts when an order is placed.
+*   🗣️ **Voice Commands**: "Hey Siri, order my usual" (via Shortcuts).
+*   📊 **Recommendation Engine**: "You usually drink Lattes at this time, want one?"
+
+---
 
 ## 📄 License
 
-MIT
+MIT © [RohiRIK](https://github.com/RohiRIK)

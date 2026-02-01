@@ -1,7 +1,7 @@
 # ☕ Personal Coffeshop
 
-![Next.js 15](https://img.shields.io/badge/Next.js_15-black?style=for-the-badge&logo=next.js&logoColor=white) 
-![Bun](https://img.shields.io/badge/Bun-Run_Dev-fbf0df?style=for-the-badge&logo=bun&logoColor=black) 
+![Next.js 15](https://img.shields.io/badge/Next.js_15-black?style=for-the-badge&logo=next.js&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-Run_Dev-fbf0df?style=for-the-badge&logo=bun&logoColor=black)
 ![Firebase](https://img.shields.io/badge/Firebase-Realtime-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)
 ![License](https://img.shields.io/badge/License-MIT-blue?style=for-the-badge)
 
@@ -16,25 +16,28 @@
 <br />
 
 > ### 🏡 The Passion Project
-> *"The Personal Coffeshop is born from a simple desire: **to be the ultimate host.** With a move to a new house on the horizon, I wanted a system that lets my friends—connected to my Wi-Fi—order their favorite coffee exactly how they like it.  It transforms my kitchen into a streamlined café, allowing me to focus on crafting the perfect cup rather than remembering who wanted oat milk."*
+>
+> _"The Personal Coffeshop is born from a simple desire: **to be the ultimate host.** With a move to a new house on the horizon, I wanted a system that lets my friends—connected to my Wi-Fi—order their favorite coffee exactly how they like it. It transforms my kitchen into a streamlined café, allowing me to focus on crafting the perfect cup rather than remembering who wanted oat milk."_
 
 ---
 
 ## 📸 The Experience
 
 ### 1. The Guest Experience
-*Friends scan a QR code (or browse to your local IP) and land on a beautiful, app-like menu.*
 
-| **Browsing the Menu** | **Customizing the Drink** |
-|:---:|:---:|
+_Friends scan a QR code (or browse to your local IP) and land on a beautiful, app-like menu._
+
+|                **Browsing the Menu**                |                          **Customizing the Drink**                           |
+| :-------------------------------------------------: | :--------------------------------------------------------------------------: |
 | <img src="assets/Shop.png" width="250" alt="Shop"/> | <img src="assets/Customization-drinks.png" width="250" alt="Customization"/> |
 
-| **Reviewing the Cart** | **Order Success** |
-|:---:|:---:|
+|               **Reviewing the Cart**                |                        **Order Success**                        |
+| :-------------------------------------------------: | :-------------------------------------------------------------: |
 | <img src="assets/Cart.png" width="250" alt="Cart"/> | <img src="assets/Order-Placed!.png" width="250" alt="Success"/> |
 
 ### 2. The Host Experience (Barista Mode)
-*I receive orders in real-time on my kitchen display.*
+
+_I receive orders in real-time on my kitchen display._
 
 <div align="center">
   <img src="assets/Admin-portal.png" alt="Admin Portal" width="800" style="border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);"/>
@@ -47,20 +50,20 @@
 
 Most POS systems are built for profit; this one is built for **hospitality**.
 
-*   **⚡ Zero Latency Performance:** Powered by **[Bun](https://bun.sh/)** and **[Next.js 15](https://nextjs.org/)** (App Router) for near-instant server-side rendering and static delivery.
-*   **📡 Real-time Synchronization:** Leveraging **Firestore snapshots** for a "no-refresh" experience. When you click "Preparing" in the kitchen, your friend's phone vibrates in the living room instantly.
-*   **🔥 Minimal Hustle Backend:** Managed by **Firebase** for handling authentication and database, with minimal UI and zero server maintenance—perfect for efficient and less hustling and an ideal hosting friend.
-*   **📱 PWA Implementation:** Optimized meta tags and manifest allow guests to "Install" the app on their phone for a native feel without an app store download.
-*   **🎨 Adaptive Design:** The Guest view is mobile-first, while the Admin Dashboard is optimized for an iPad mounted on the kitchen wall (KDS style).
+- **⚡ Zero Latency Performance:** Powered by **[Bun](https://bun.sh/)** and **[Next.js 15](https://nextjs.org/)** (App Router) for near-instant server-side rendering and static delivery.
+- **📡 Real-time Synchronization:** Leveraging **Firestore snapshots** for a "no-refresh" experience. When you click "Preparing" in the kitchen, your friend's phone vibrates in the living room instantly.
+- **🔥 Minimal Hustle Backend:** Managed by **Firebase** for handling authentication and database, with minimal UI and zero server maintenance—perfect for efficient and less hustling and an ideal hosting friend.
+- **📱 PWA Implementation:** Optimized meta tags and manifest allow guests to "Install" the app on their phone for a native feel without an app store download.
+- **🎨 Adaptive Design:** The Guest view is mobile-first, while the Admin Dashboard is optimized for an iPad mounted on the kitchen wall (KDS style).
 
 ## ✨ Features Comparison
 
-| Feature | Guest App (Friend) | Admin Dashboard (Host) |
-| :--- | :--- | :--- |
+| Feature               | Guest App (Friend)                    | Admin Dashboard (Host)    |
+| :-------------------- | :------------------------------------ | :------------------------ |
 | **Real-time Updates** | Tracks Order Status (Pending → Ready) | Instant Ticket Arrival 🔔 |
-| **Persistence** | LocalStorage Cart (Resume later) | Firestore State Sync |
-| **Data Usage** | Minimal (Static Assets Cached) | High Density Grid View |
-| **Authentication** | Anonymous / Guest Logic | Secure Admin Login |
+| **Persistence**       | LocalStorage Cart (Resume later)      | Firestore State Sync      |
+| **Data Usage**        | Minimal (Static Assets Cached)        | High Density Grid View    |
+| **Authentication**    | Anonymous / Guest Logic               | Secure Admin Login        |
 
 ---
 
@@ -68,8 +71,8 @@ Most POS systems are built for profit; this one is built for **hospitality**.
 
 ### Prerequisites
 
-*   **Bun**: `curl -fsSL https://bun.sh/install | bash`
-*   **Firebase Project**: Authentication (Email + Anonymous), Firestore.
+- **Bun**: `curl -fsSL https://bun.sh/install | bash`
+- **Firebase Project**: Authentication (Email + Anonymous), Firestore.
 
 ### 1. Installation
 
@@ -94,10 +97,10 @@ NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
 
 You need to create these collections or run the seed script (coming soon).
 
-*   **`menu`**: Documents with fields `{ name, price, description, category, available (bool), imageUrl }`
-*   **`orders`**: Stores the transactions.
-*   **`users`**: Stores user profiles and VIP stats.
-*   **`inventory`**: `{ id: "milk_whole", stock: 100 }`
+- **`menu`**: Documents with fields `{ name, price, description, category, available (bool), imageUrl }`
+- **`orders`**: Stores the transactions.
+- **`users`**: Stores user profiles and VIP stats.
+- **`inventory`**: `{ id: "milk_whole", stock: 100 }`
 
 ### 4. Running for Guests (Local Wi-Fi) 📡
 
@@ -115,9 +118,9 @@ bun run dev --host 0.0.0.0
 
 ## 🔮 Future Roadmap
 
-*   🖨️ **Thermal Printer Integration**: Auto-print receipts when an order is placed.
-*   🗣️ **Voice Commands**: "Hey Siri, order my usual" (via Shortcuts).
-*   📊 **Recommendation Engine**: "You usually drink Lattes at this time, want one?"
+- 🖨️ **Thermal Printer Integration**: Auto-print receipts when an order is placed.
+- 🗣️ **Voice Commands**: "Hey Siri, order my usual" (via Shortcuts).
+- 📊 **Recommendation Engine**: "You usually drink Lattes at this time, want one?"
 
 ---
 

@@ -31,8 +31,9 @@ function FeaturedDrinks({ items }: { items: MenuItem[] }) {
 
                 {/* Tag badge */}
                 <div
-                  className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold ${item.tag === "Hot" ? "bg-orange-500" : "bg-blue-500"
-                    }`}
+                  className={`absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-bold ${
+                    item.tag === "Hot" ? "bg-orange-500" : "bg-blue-500"
+                  }`}
                 >
                   {item.tag}
                 </div>

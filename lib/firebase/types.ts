@@ -20,6 +20,7 @@ export interface OrderItem {
   cup?: string;
   sugar?: string;
   specialInstructions?: string;
+  imageUrl?: string;
 }
 
 export interface Order {

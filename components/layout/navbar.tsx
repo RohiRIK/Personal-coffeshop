@@ -17,9 +17,9 @@ export function Navbar() {
       <nav className="sticky top-0 z-50 bg-stone-900/95 backdrop-blur-sm border-b border-stone-800">
         <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="text-xl font-bold">
-            <span className="text-amber-400">Personal Coffeshop</span>{" "}
-            <span className="text-stone-100 hidden sm:inline">Coffee</span>
+          <Link href="/" className="text-xl font-bold flex items-center gap-2">
+            <span className="text-amber-400">Personal Coffeshop</span>
+            <Coffee className="w-6 h-6 text-amber-500" />
           </Link>
 
           {/* Desktop Navigation */}

@@ -43,8 +43,13 @@ export function useInventory() {
 
   const isAvailable = (id: string) => {
     const item = inventory.find((i) => i.id === id);
-    return item ? item.available : true; // Default to true if not found (or false?)
+    return item ? item.available : true;
   };
 
-  return { inventory, loading, toggleAvailability, isAvailable };
+  const getQuantity = (id: string) => {
+    const item = inventory.find((i) => i.id === id);
+    return item?.quantity ?? 0;
+  };
+
+  return { inventory, loading, toggleAvailability, isAvailable, getQuantity };
 }

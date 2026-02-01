@@ -13,6 +13,7 @@ import {
 } from "firebase/firestore";
 import { db } from "./index";
 import type { Order, OrderItem } from "./types";
+import { deductInventory } from "./inventory";
 
 const ORDERS_COLLECTION = "orders";
 
@@ -40,6 +41,10 @@ export async function createOrder(
     };
 
     const docRef = await addDoc(collection(db, ORDERS_COLLECTION), orderData);
+
+    // Deduct Inventory asynchronously (don't await to keep UI fast)
+    deductInventory(items).catch(err => console.error("Inventory deduction failed:", err));
+
     return docRef.id;
   } catch (error) {
     console.error("Error creating order:", error);

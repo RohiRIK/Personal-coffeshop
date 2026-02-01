@@ -18,6 +18,11 @@ The **Personal Coffeshop** is a modern, full-stack Order Management System (OMS)
 - **Menu Management**: Reactively toggle item availability (Sold Out) and manage prices.
 - **Inventory Management**: Real-time stock control for modifiers (Milk, Cups).
 - **Customer Insights**: View "VIP" status, total spend, and favorite drinks directly in the order ticket.
+- **📱 PWA Ready**: Installable on iOS/Android with offline support and app-like experience.
+
+### 🐳 Deployment
+- **Docker**: Containerized with optimized `oven/bun:alpine` image.
+- **GHCR**: Automated builds pushed to GitHub Container Registry.
 
 ## 🛠️ Tech Stack
 

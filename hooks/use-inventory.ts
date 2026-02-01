@@ -7,6 +7,7 @@ import { InventoryItem } from "lib/firebase/types";
 import {
   initializeInventory,
   updateInventoryStatus,
+  updateInventoryQuantity,
 } from "lib/firebase/inventory";
 import { toast } from "sonner";
 
@@ -51,5 +52,21 @@ export function useInventory() {
     return item?.quantity ?? 0;
   };
 
-  return { inventory, loading, toggleAvailability, isAvailable, getQuantity };
+  const updateStock = async (id: string, newQuantity: number) => {
+    try {
+      await updateInventoryQuantity(id, newQuantity);
+      toast.success("Stock updated");
+    } catch (error) {
+      toast.error("Failed to update stock");
+    }
+  };
+
+  return {
+    inventory,
+    loading,
+    toggleAvailability,
+    isAvailable,
+    getQuantity,
+    updateStock,
+  };
 }

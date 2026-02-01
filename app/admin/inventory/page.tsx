@@ -1,11 +1,12 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useInventory } from "hooks/use-inventory";
 import { MILK_OPTIONS, CUP_OPTIONS } from "lib/constants";
 import { Milk, Coffee } from "lucide-react";
 
 export default function InventoryPage() {
-  const { isAvailable, getQuantity, toggleAvailability, loading } = useInventory();
+  const { isAvailable, getQuantity, toggleAvailability, updateStock, loading } = useInventory();
 
   if (loading) {
     return <div className="text-stone-400">Loading inventory...</div>;
@@ -35,6 +36,7 @@ export default function InventoryPage() {
                 onToggle={() =>
                   toggleAvailability(item.id, isAvailable(item.id))
                 }
+                onUpdateStock={(qty) => updateStock(item.id, qty)}
               />
             ))}
           </div>
@@ -56,6 +58,7 @@ export default function InventoryPage() {
                 onToggle={() =>
                   toggleAvailability(item.id, isAvailable(item.id))
                 }
+                onUpdateStock={(qty) => updateStock(item.id, qty)}
               />
             ))}
           </div>
@@ -70,18 +73,45 @@ function InventoryItemRow({
   available,
   quantity,
   onToggle,
+  onUpdateStock,
 }: {
   name: string;
   available: boolean;
   quantity: number;
   onToggle: () => void;
+  onUpdateStock: (qty: number) => void;
 }) {
   const isLowStock = quantity < 10 && quantity > 0;
   const isOutOfStock = quantity === 0;
+  const [isEditing, setIsEditing] = useState(false);
+  const [editValue, setEditValue] = useState(quantity.toString());
+
+  // Sync edits if external quantity changes (unless editing)
+  useEffect(() => {
+    if (!isEditing) setEditValue(quantity.toString());
+  }, [quantity, isEditing]);
+
+  const handleSave = () => {
+    const val = parseInt(editValue);
+    if (!isNaN(val) && val >= 0) {
+      onUpdateStock(val);
+    } else {
+      setEditValue(quantity.toString()); // Revert if invalid
+    }
+    setIsEditing(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") handleSave();
+    if (e.key === "Escape") {
+      setEditValue(quantity.toString());
+      setIsEditing(false);
+    }
+  };
 
   return (
     <div className="flex items-center justify-between p-4 bg-stone-800 rounded-xl border border-stone-700">
-      <div>
+      <div className="flex-1">
         <div className="flex items-center gap-3">
           <span
             className={`font-medium ${available ? "text-stone-200" : "text-stone-500 line-through"}`}
@@ -99,8 +129,31 @@ function InventoryItemRow({
             </span>
           )}
         </div>
-        <div className="text-xs text-stone-500 mt-0.5 font-mono">
-          {quantity} units remaining
+
+        <div className="flex items-center gap-2 mt-1">
+          {isEditing ? (
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                onBlur={handleSave}
+                onKeyDown={handleKeyDown}
+                autoFocus
+                className="w-20 bg-stone-950 border border-amber-500 rounded px-2 py-1 text-sm text-stone-100 focus:outline-none"
+              />
+              <span className="text-xs text-stone-500">Press Enter</span>
+            </div>
+          ) : (
+            <div
+              className="text-xs text-stone-500 font-mono hover:text-amber-500 cursor-pointer flex items-center gap-1 transition-colors group"
+              onClick={() => setIsEditing(true)}
+              title="Click to edit quantity"
+            >
+              {quantity} units
+              <span className="opacity-0 group-hover:opacity-100 text-[10px] bg-stone-700 px-1 rounded">Edit</span>
+            </div>
+          )}
         </div>
       </div>
 

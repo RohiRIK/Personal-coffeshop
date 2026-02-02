@@ -1,14 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import {
-  collection,
-  query,
-  orderBy,
-  onSnapshot,
-  where,
-  Timestamp,
-} from "firebase/firestore";
+import { useState, useEffect, useRef } from "react";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "lib/firebase";
 import { Order } from "lib/firebase/types";
 import { updateOrderStatus } from "lib/firebase/orders";
@@ -17,12 +10,27 @@ import { toast } from "sonner";
 export function useAdminOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
+  const previousOrderCountRef = useRef<number | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // Initialize audio on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      audioRef.current = new Audio("/sounds/notification.mp3");
+      audioRef.current.volume = 0.5;
+    }
+  }, []);
+
+  const playNotificationSound = () => {
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch((e) => {
+        console.log("Audio play failed (user interaction required):", e);
+      });
+    }
+  };
 
   useEffect(() => {
-    // Listen for orders from the last 24 hours (or just all active ones)
-    // For simplicity, we'll listen to all active orders (not completed/cancelled)
-    // OR just last 100. Let's do all for now as volume is low.
-
     const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
 
     const unsubscribe = onSnapshot(
@@ -38,6 +46,27 @@ export function useAdminOrders() {
             updatedAt: data.updatedAt?.toDate(),
           } as Order);
         });
+
+        // Check for new orders (only after initial load)
+        if (previousOrderCountRef.current !== null) {
+          const pendingOrders = newOrders.filter(
+            (o) => o.status === "pending",
+          ).length;
+          const previousPendingOrders =
+            previousOrderCountRef.current !== null
+              ? orders.filter((o) => o.status === "pending").length
+              : 0;
+
+          if (pendingOrders > previousPendingOrders) {
+            playNotificationSound();
+            toast.success("🔔 New order received!", {
+              description: "Check the orders queue",
+              duration: 5000,
+            });
+          }
+        }
+
+        previousOrderCountRef.current = newOrders.length;
         setOrders(newOrders);
         setLoading(false);
       },
@@ -49,7 +78,7 @@ export function useAdminOrders() {
     );
 
     return () => unsubscribe();
-  }, []);
+  }, [orders]);
 
   const updateStatus = async (orderId: string, newStatus: Order["status"]) => {
     try {
@@ -59,9 +88,51 @@ export function useAdminOrders() {
       );
       await updateOrderStatus(orderId, newStatus);
       toast.success(`Order updated to ${newStatus}`);
+
+      // Trigger emails based on status change
+      if (newStatus === "ready") {
+        // Send "order ready" email
+        fetch("/api/send-email", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ type: "ready", orderId }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success) {
+              toast.success("📧 Ready email sent to customer");
+            }
+          })
+          .catch(() => {
+            // Silent fail - email is non-critical
+          });
+      }
+
+      if (newStatus === "completed") {
+        // Schedule rating email after 5 minutes
+        toast.info("Rating email will be sent in 5 minutes");
+        setTimeout(
+          () => {
+            fetch("/api/send-email", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ type: "rating", orderId }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.success) {
+                  console.log("Rating email sent for order:", orderId);
+                }
+              })
+              .catch(() => {
+                // Silent fail
+              });
+          },
+          5 * 60 * 1000,
+        ); // 5 minutes
+      }
     } catch (error) {
       toast.error("Failed to update status");
-      // Revert is handled by the snapshot listener eventually, but could be better
     }
   };
 

@@ -61,6 +61,7 @@ export default function CheckoutPage() {
         user.uid,
         user.displayName || user.email || "Guest",
         orderItems,
+        user.email || undefined,
       );
 
       clearCart();

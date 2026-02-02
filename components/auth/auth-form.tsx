@@ -15,14 +15,15 @@ export function AuthForm({
   mode: initialMode = "login",
   onSuccess,
 }: AuthFormProps) {
-  const [mode, setMode] = useState<"login" | "signup">(initialMode);
+  const [mode, setMode] = useState<"login" | "signup" | "forgot-password">(
+    initialMode,
+  );
   const [loginType, setLoginType] = useState<"guest" | "admin">("guest");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [displayName, setDisplayName] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [resetEmailSent, setResetEmailSent] = useState(false);
 
   const { user, signIn, signUp, signInWithGoogle, resetPassword } = useAuth();
@@ -30,9 +31,10 @@ export function AuthForm({
 
   const getRedirectPath = () => (loginType === "admin" ? "/admin" : "/menu");
 
-  const handleForgotPassword = async () => {
+  const handleResetPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!email) {
-      setError("Please enter your email address first");
+      setError("Please enter your email address");
       return;
     }
     setError("");
@@ -113,6 +115,82 @@ export function AuthForm({
       setLoading(false);
     }
   };
+
+  // Forgot Password View
+  if (mode === "forgot-password") {
+    return (
+      <div className="w-full max-w-md mx-auto p-6 bg-stone-800 rounded-2xl border border-stone-700">
+        <h2 className="text-2xl font-bold text-center text-stone-100 mb-2">
+          Reset Password
+        </h2>
+        <p className="text-stone-400 text-center mb-6 text-sm">
+          Enter your email to receive a password reset link
+        </p>
+
+        {resetEmailSent ? (
+          <div className="text-center">
+            <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/50 text-green-400 text-sm mb-6 flex flex-col items-center gap-3">
+              <Mail className="w-8 h-8" />
+              <p>Email sent! Check your inbox to reset your password.</p>
+            </div>
+            <button
+              onClick={() => {
+                setMode("login");
+                setResetEmailSent(false);
+                setError("");
+              }}
+              className="text-amber-400 hover:text-amber-300 font-medium transition-colors"
+            >
+              Back to Login
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleResetPasswordSubmit} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-stone-300 mb-1">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full p-3 rounded-lg bg-stone-900 border border-stone-700 text-stone-100 placeholder-stone-500 focus:outline-none focus:border-amber-500 transition-colors"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            {error && (
+              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/50 text-red-400 text-sm">
+                {error}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full py-3 rounded-xl font-bold text-lg bg-amber-500 hover:bg-amber-400 text-stone-900 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? "Sending..." : "Send Reset Link"}
+            </button>
+
+            <div className="text-center mt-4">
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("login");
+                  setError("");
+                }}
+                className="text-stone-400 hover:text-stone-200 text-sm transition-colors"
+              >
+                Back to Login
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-stone-800 rounded-2xl border border-stone-700">
@@ -231,7 +309,10 @@ export function AuthForm({
           {mode === "login" && (
             <button
               type="button"
-              onClick={handleForgotPassword}
+              onClick={() => {
+                setMode("forgot-password");
+                setError("");
+              }}
               disabled={loading}
               className="mt-2 text-sm text-amber-400 hover:text-amber-300 transition-colors disabled:opacity-50"
             >
@@ -239,13 +320,6 @@ export function AuthForm({
             </button>
           )}
         </div>
-
-        {resetEmailSent && (
-          <div className="p-3 rounded-lg bg-green-500/10 border border-green-500/50 text-green-400 text-sm flex items-center gap-2">
-            <Mail className="w-4 h-4" />
-            Password reset email sent! Check your inbox.
-          </div>
-        )}
 
         {error && (
           <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/50 text-red-400 text-sm">
@@ -268,7 +342,10 @@ export function AuthForm({
 
       <div className="mt-6 text-center">
         <button
-          onClick={() => setMode(mode === "login" ? "signup" : "login")}
+          onClick={() => {
+            setMode(mode === "login" ? "signup" : "login");
+            setError("");
+          }}
           className="text-amber-400 hover:text-amber-300 text-sm transition-colors"
         >
           {mode === "login"

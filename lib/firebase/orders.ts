@@ -14,6 +14,7 @@ import {
 import { db } from "./index";
 import type { Order, OrderItem } from "./types";
 import { deductInventory } from "./inventory";
+import { v4 as uuidv4 } from "uuid";
 
 const ORDERS_COLLECTION = "orders";
 
@@ -24,6 +25,7 @@ export async function createOrder(
   userId: string,
   userName: string,
   items: OrderItem[],
+  userEmail?: string,
 ): Promise<string> {
   try {
     const total = items.reduce(
@@ -31,13 +33,20 @@ export async function createOrder(
       0,
     );
 
+    // Generate a rating token for email-based rating
+    const ratingToken = uuidv4();
+
     const orderData = {
       userId,
       userName,
+      userEmail: userEmail || null,
+      ratingToken,
       items,
       total,
       status: "pending",
       createdAt: serverTimestamp(),
+      emailSentReady: false,
+      emailSentRating: false,
     };
 
     const docRef = await addDoc(collection(db, ORDERS_COLLECTION), orderData);

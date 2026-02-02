@@ -11,6 +11,7 @@ import {
   Home,
   LogOut,
   X,
+  BarChart3,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -24,6 +25,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
   const links = [
     { href: "/admin/orders", label: "Live Orders", icon: ClipboardList },
+    { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
     { href: "/admin/menu", label: "Menu", icon: MenuIcon },
     { href: "/admin/inventory", label: "Inventory", icon: Package },
     { href: "/admin/customers", label: "Customers", icon: Users },

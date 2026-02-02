@@ -27,6 +27,8 @@ export interface Order {
   id: string;
   userId: string;
   userName?: string;
+  userEmail?: string;
+  ratingToken?: string;
   items: OrderItem[];
   total: number;
   status: "pending" | "preparing" | "ready" | "completed" | "cancelled";
@@ -34,6 +36,8 @@ export interface Order {
   updatedAt?: Date;
   rating?: number;
   review?: string;
+  emailSentReady?: boolean;
+  emailSentRating?: boolean;
 }
 
 // User Types

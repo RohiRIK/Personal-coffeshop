@@ -32,10 +32,10 @@
 ### Week 2.2: User Management
 
 - [x] Implement user registration flow
-- [X] Add password reset functionality
+- [x] Add password reset functionality
 - [x] Create user role differentiation (guest/admin)
 - [x] Implement VIP status tracking logic (via customer insights hook)
-- [X] Add user preference storage
+- [x] Add user preference storage
 
 ## Phase 3: Core Guest Experience (Week 3) ✅
 
@@ -69,7 +69,7 @@
 
 - [x] Build order database schema (Firestore)
 - [x] Implement order status tracking (pending/preparing/ready/completed)
-- [X] Add order modification capabilities
+- [x] Add order modification capabilities
 - [ ] Create order cancellation flow
 - [x] Implement rating submission (`rateOrder()`)
 

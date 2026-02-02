@@ -1,0 +1,10 @@
+# Build Output
+.next
+dist
+build
+node_modules
+
+# Generated Service Workers
+public/sw.js
+public/swe-worker-*.js
+public/workbox-*.js

@@ -12,6 +12,8 @@ import { EnvProvider } from "components/env-provider";
 const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Personal Coffeshop";
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Personal Coffeshop",
   description: "Your personal coffee ordering companion.",

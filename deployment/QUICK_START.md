@@ -19,7 +19,7 @@ This guide describes how to run the Personal Coffee Shop application from anywhe
         image: ghcr.io/rohirik/personal-coffeshop:latest
         container_name: coffee-shop
         ports:
-          - "3000:3000"
+          - "3006:3000"
         environment:
           - PORT=3000
           - HOSTNAME=0.0.0.0
@@ -37,7 +37,7 @@ This guide describes how to run the Personal Coffee Shop application from anywhe
     ```
 
 3.  **Create .env**: Create a `.env` file in the same folder with your credentials (see template below).
-5.  **Access**: Open `http://localhost:3000`.
+4.  **Access**: Open `http://localhost:3000`.
 
 ## Option 2: Run from Source
 

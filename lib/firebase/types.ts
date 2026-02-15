@@ -76,3 +76,8 @@ export interface Category {
   description?: string;
   path: string;
 }
+
+// App Settings Types
+export interface AppSettings {
+  hidePrices: boolean;
+}

@@ -12,7 +12,10 @@ import {
   LogOut,
   X,
   BarChart3,
+  Eye,
+  EyeOff,
 } from "lucide-react";
+import { useSettings } from "contexts/settings-context";
 
 interface AdminSidebarProps {
   isOpen: boolean;
@@ -22,6 +25,7 @@ interface AdminSidebarProps {
 export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const { signOut } = useAuth();
+  const { hidePrices, toggleHidePrices } = useSettings();
 
   const links = [
     { href: "/admin/orders", label: "Live Orders", icon: ClipboardList },
@@ -82,10 +86,36 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           })}
         </nav>
 
-        <div className="p-4 border-t border-stone-800">
+        <div className="p-4 border-t border-stone-800 space-y-3">
+          {/* Hide Prices Toggle */}
+          <button
+            onClick={toggleHidePrices}
+            className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-stone-800/50 hover:bg-stone-800 transition-colors"
+          >
+            <div className="flex items-center gap-3 text-stone-300">
+              {hidePrices ? (
+                <EyeOff className="w-5 h-5" />
+              ) : (
+                <Eye className="w-5 h-5" />
+              )}
+              <span className="text-sm font-medium">Hide Prices</span>
+            </div>
+            <div
+              className={`relative w-10 h-5 rounded-full transition-colors ${
+                hidePrices ? "bg-amber-500" : "bg-stone-600"
+              }`}
+            >
+              <div
+                className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                  hidePrices ? "translate-x-5" : "translate-x-0.5"
+                }`}
+              />
+            </div>
+          </button>
+
           <Link
             href="/"
-            className="flex items-center gap-3 px-4 py-3 text-stone-400 hover:text-stone-100 transition-colors mb-2"
+            className="flex items-center gap-3 px-4 py-3 text-stone-400 hover:text-stone-100 transition-colors"
           >
             <Home className="w-5 h-5" />
             <span>Back to App</span>

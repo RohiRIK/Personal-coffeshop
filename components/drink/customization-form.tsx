@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MILK_OPTIONS, CUP_OPTIONS, SUGAR_OPTIONS } from "lib/constants";
 import { useCart } from "contexts/cart-context";
 import { useInventory } from "hooks/use-inventory";
+import { useSettings } from "contexts/settings-context";
 import { toast } from "sonner";
 
 interface CustomizationFormProps {
@@ -21,6 +22,7 @@ export function CustomizationForm({
 }: CustomizationFormProps) {
   const { addItem } = useCart();
   const { isAvailable } = useInventory();
+  const { hidePrices } = useSettings();
   const [selectedMilk, setSelectedMilk] = useState("whole");
   const [selectedCup, setSelectedCup] = useState("ceramic");
   const [selectedSugar, setSelectedSugar] = useState("none");
@@ -210,12 +212,14 @@ export function CustomizationForm({
             <p className="italic text-stone-400">"{instructions}"</p>
           )}
         </div>
-        <div className="mt-4 pt-4 border-t border-stone-700 flex justify-between items-center">
-          <span className="font-medium text-stone-300">Total Price</span>
-          <span className="text-xl font-bold text-amber-400">
-            ${(price * quantity).toFixed(2)}
-          </span>
-        </div>
+        {!hidePrices && (
+          <div className="mt-4 pt-4 border-t border-stone-700 flex justify-between items-center">
+            <span className="font-medium text-stone-300">Total Price</span>
+            <span className="text-xl font-bold text-amber-400">
+              ${(price * quantity).toFixed(2)}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Add to Order Button */}

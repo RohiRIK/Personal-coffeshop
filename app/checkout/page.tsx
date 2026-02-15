@@ -2,6 +2,7 @@
 
 import { useAuth } from "contexts/auth-context";
 import { useCart } from "contexts/cart-context";
+import { useSettings } from "contexts/settings-context";
 import { createOrder } from "lib/firebase/orders";
 import { OrderItem } from "lib/firebase/types";
 import Link from "next/link";
@@ -13,6 +14,7 @@ import { toast } from "sonner";
 export default function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
   const { items, total, clearCart } = useCart();
+  const { hidePrices } = useSettings();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
@@ -117,9 +119,11 @@ export default function CheckoutPage() {
                         <h3 className="font-bold text-stone-100">
                           {item.name}
                         </h3>
-                        <span className="font-medium text-amber-400">
-                          ${(item.price * item.quantity).toFixed(2)}
-                        </span>
+                        {!hidePrices && (
+                          <span className="font-medium text-amber-400">
+                            ${(item.price * item.quantity).toFixed(2)}
+                          </span>
+                        )}
                       </div>
                       <p className="text-sm text-stone-400">
                         Qty: {item.quantity}
@@ -165,20 +169,22 @@ export default function CheckoutPage() {
             <div className="bg-stone-800 rounded-2xl p-6 border border-stone-700 sticky top-24">
               <h2 className="text-xl font-bold text-stone-100 mb-4">Payment</h2>
 
-              <div className="space-y-2 mb-6 pb-6 border-b border-stone-700">
-                <div className="flex justify-between text-stone-400">
-                  <span>Subtotal</span>
-                  <span>${total.toFixed(2)}</span>
+              {!hidePrices && (
+                <div className="space-y-2 mb-6 pb-6 border-b border-stone-700">
+                  <div className="flex justify-between text-stone-400">
+                    <span>Subtotal</span>
+                    <span>${total.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-stone-400">
+                    <span>Tax (0%)</span>
+                    <span>$0.00</span>
+                  </div>
+                  <div className="flex justify-between text-xl font-bold text-amber-400 pt-2">
+                    <span>Total</span>
+                    <span>${total.toFixed(2)}</span>
+                  </div>
                 </div>
-                <div className="flex justify-between text-stone-400">
-                  <span>Tax (0%)</span>
-                  <span>$0.00</span>
-                </div>
-                <div className="flex justify-between text-xl font-bold text-amber-400 pt-2">
-                  <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
-                </div>
-              </div>
+              )}
 
               <div className="mb-6">
                 <label className="block text-sm font-medium text-stone-300 mb-2">

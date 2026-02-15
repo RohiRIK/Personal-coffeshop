@@ -1,6 +1,7 @@
 "use client";
 
 import { useCart } from "contexts/cart-context";
+import { useSettings } from "contexts/settings-context";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -12,6 +13,7 @@ interface CartSidebarProps {
 
 export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
   const { items, removeItem, updateQuantity, total } = useCart();
+  const { hidePrices } = useSettings();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -127,9 +129,11 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
                         +
                       </button>
                     </div>
-                    <span className="font-bold text-amber-400">
-                      ${(item.price * item.quantity).toFixed(2)}
-                    </span>
+                    {!hidePrices && (
+                      <span className="font-bold text-amber-400">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -139,12 +143,14 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
 
         {items.length > 0 && (
           <div className="p-4 border-t border-stone-800 bg-stone-900">
-            <div className="flex justify-between items-center mb-4">
-              <span className="text-stone-400">Total</span>
-              <span className="text-2xl font-bold text-amber-400">
-                ${total.toFixed(2)}
-              </span>
-            </div>
+            {!hidePrices && (
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-stone-400">Total</span>
+                <span className="text-2xl font-bold text-amber-400">
+                  ${total.toFixed(2)}
+                </span>
+              </div>
+            )}
             <Link
               href="/checkout"
               onClick={onClose}

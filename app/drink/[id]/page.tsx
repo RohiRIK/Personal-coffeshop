@@ -3,6 +3,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getMenuItem, getMenuItems } from "lib/firebase/menu";
 import { CustomizationForm } from "components/drink/customization-form";
+import { DrinkPrice } from "components/drink/drink-price";
 
 // Generate static params for all drinks
 export async function generateStaticParams() {
@@ -94,9 +95,7 @@ export default async function DrinkPage({
               <h1 className="text-3xl md:text-4xl font-bold text-stone-100">
                 {item.name}
               </h1>
-              <p className="text-2xl font-bold text-amber-400 mt-2">
-                ${item.price.toFixed(2)}
-              </p>
+              <DrinkPrice price={item.price} />
             </div>
 
             <p className="text-stone-400 leading-relaxed">{item.description}</p>

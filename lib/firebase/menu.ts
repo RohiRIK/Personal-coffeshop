@@ -7,11 +7,38 @@ import {
   query,
   where,
   orderBy,
+  addDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { db } from "./index";
 import type { MenuItem, Category } from "./types";
 
 const MENU_COLLECTION = "menu";
+
+/**
+ * Add a new menu item
+ */
+export async function addMenuItem(item: Omit<MenuItem, "id">): Promise<string> {
+  try {
+    const docRef = await addDoc(collection(db, MENU_COLLECTION), item);
+    return docRef.id;
+  } catch (error) {
+    console.error("Error adding menu item:", error);
+    throw error;
+  }
+}
+
+/**
+ * Delete a menu item
+ */
+export async function deleteMenuItem(id: string): Promise<void> {
+  try {
+    await deleteDoc(doc(db, MENU_COLLECTION, id));
+  } catch (error) {
+    console.error("Error deleting menu item:", error);
+    throw error;
+  }
+}
 
 /**
  * Update a menu item

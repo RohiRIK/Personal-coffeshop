@@ -8,9 +8,10 @@ import { Navbar } from "components/layout/navbar";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { EnvProvider } from "components/env-provider";
+import { getServerEnv } from "lib/env";
 
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Personal Coffeshop";
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const siteName = getServerEnv("NEXT_PUBLIC_SITE_NAME") || "Personal Coffeshop";
+const baseUrl = getServerEnv("NEXT_PUBLIC_BASE_URL") || "http://localhost:3000";
 
 export const dynamic = "force-dynamic";
 
@@ -34,17 +35,21 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const env = {
-    NEXT_PUBLIC_FIREBASE_API_KEY: process.env["NEXT_PUBLIC_FIREBASE_API_KEY"],
-    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN:
-      process.env["NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN"],
-    NEXT_PUBLIC_FIREBASE_PROJECT_ID:
-      process.env["NEXT_PUBLIC_FIREBASE_PROJECT_ID"],
-    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET:
-      process.env["NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET"],
-    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID:
-      process.env["NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID"],
-    NEXT_PUBLIC_FIREBASE_APP_ID: process.env["NEXT_PUBLIC_FIREBASE_APP_ID"],
-    NEXT_PUBLIC_APP_URL: process.env["NEXT_PUBLIC_APP_URL"],
+    NEXT_PUBLIC_FIREBASE_API_KEY: getServerEnv("NEXT_PUBLIC_FIREBASE_API_KEY"),
+    NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: getServerEnv(
+      "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN",
+    ),
+    NEXT_PUBLIC_FIREBASE_PROJECT_ID: getServerEnv(
+      "NEXT_PUBLIC_FIREBASE_PROJECT_ID",
+    ),
+    NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: getServerEnv(
+      "NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET",
+    ),
+    NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: getServerEnv(
+      "NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID",
+    ),
+    NEXT_PUBLIC_FIREBASE_APP_ID: getServerEnv("NEXT_PUBLIC_FIREBASE_APP_ID"),
+    NEXT_PUBLIC_APP_URL: getServerEnv("NEXT_PUBLIC_APP_URL"),
   };
 
   return (

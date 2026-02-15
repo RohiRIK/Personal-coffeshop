@@ -41,12 +41,14 @@ function HidePricesToggle() {
           <span className="text-sm font-medium">Hide Prices</span>
         </div>
         <div
-          className={`relative w-10 h-5 rounded-full transition-colors ${hidePrices ? "bg-amber-500" : "bg-stone-600"
-            }`}
+          className={`relative w-10 h-5 rounded-full transition-colors ${
+            hidePrices ? "bg-amber-500" : "bg-stone-600"
+          }`}
         >
           <div
-            className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${hidePrices ? "translate-x-5" : "translate-x-0.5"
-              }`}
+            className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+              hidePrices ? "translate-x-5" : "translate-x-0.5"
+            }`}
           />
         </div>
       </button>
@@ -81,8 +83,9 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
       {/* Sidebar */}
       <div
-        className={`w-64 bg-stone-900 border-r border-stone-800 flex flex-col h-screen fixed left-0 top-0 z-50 transform transition-transform duration-300 md:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
-          }`}
+        className={`w-64 bg-stone-900 border-r border-stone-800 flex flex-col h-screen fixed left-0 top-0 z-50 transform transition-transform duration-300 md:translate-x-0 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
       >
         <div className="p-6 flex items-center justify-between">
           <h1 className="text-xl font-bold">
@@ -106,10 +109,11 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                 key={link.href}
                 href={link.href}
                 onClick={onClose}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive
-                  ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                  : "text-stone-400 hover:bg-stone-800 hover:text-stone-100"
-                  }`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
+                  isActive
+                    ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                    : "text-stone-400 hover:bg-stone-800 hover:text-stone-100"
+                }`}
               >
                 <Icon className="w-5 h-5" />
                 <span className="font-medium">{link.label}</span>

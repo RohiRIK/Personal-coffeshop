@@ -12,9 +12,10 @@ export function MenuCard({ item }: { item: MenuItem }) {
     <Link
       href={`/drink/${item.id}`}
       className={`group relative bg-stone-800 rounded-xl overflow-hidden transition-all duration-300 
-        ${item.available
-          ? "hover:shadow-xl hover:shadow-amber-500/10 hover:scale-[1.02] cursor-pointer"
-          : "opacity-60 cursor-not-allowed"
+        ${
+          item.available
+            ? "hover:shadow-xl hover:shadow-amber-500/10 hover:scale-[1.02] cursor-pointer"
+            : "opacity-60 cursor-not-allowed"
         }`}
     >
       <div className="aspect-square relative">
@@ -23,15 +24,17 @@ export function MenuCard({ item }: { item: MenuItem }) {
           alt={item.name}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          className={`object-cover transition-transform duration-500 ${item.available ? "group-hover:scale-110" : "grayscale"
-            }`}
+          className={`object-cover transition-transform duration-500 ${
+            item.available ? "group-hover:scale-110" : "grayscale"
+          }`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
 
         {/* Tag badge */}
         <div
-          className={`absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${item.tag === "Hot" ? "bg-orange-500" : "bg-blue-500"
-            }`}
+          className={`absolute top-3 left-3 flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold ${
+            item.tag === "Hot" ? "bg-orange-500" : "bg-blue-500"
+          }`}
         >
           {item.tag === "Hot" ? "🔥" : "❄️"} {item.tag}
         </div>

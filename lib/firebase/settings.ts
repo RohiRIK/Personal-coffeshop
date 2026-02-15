@@ -64,6 +64,6 @@ export function onAppSettingsChange(
     console.error("Failed to setup settings listener:", error);
     // Return a no-op unsubscribe
     callback(DEFAULT_SETTINGS);
-    return () => { };
+    return () => {};
   }
 }

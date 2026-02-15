@@ -1,7 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { getMenuItems, updateMenuItem, deleteMenuItem } from "lib/firebase/menu";
+import {
+  getMenuItems,
+  updateMenuItem,
+  deleteMenuItem,
+} from "lib/firebase/menu";
 import { MenuItem } from "lib/firebase/types";
 import { toast } from "sonner";
 import { CheckCircle2, XCircle, Pencil, Plus, Trash2 } from "lucide-react";
@@ -127,10 +131,11 @@ export default function MenuAdminPage() {
                 <td className="px-6 py-4">
                   <button
                     onClick={() => toggleAvailability(item)}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${item.available
-                      ? "bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20"
-                      : "bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20"
-                      }`}
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition-colors ${
+                      item.available
+                        ? "bg-green-500/10 text-green-400 border-green-500/20 hover:bg-green-500/20"
+                        : "bg-red-500/10 text-red-400 border-red-500/20 hover:bg-red-500/20"
+                    }`}
                   >
                     {item.available ? (
                       <>

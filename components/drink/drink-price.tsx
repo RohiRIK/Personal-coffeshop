@@ -1,9 +1,9 @@
 "use client";
 
-import { useSettings } from "contexts/settings-context";
+import { useHidePrices } from "hooks/use-hide-prices";
 
 export function DrinkPrice({ price }: { price: number }) {
-  const { hidePrices } = useSettings();
+  const { hidePrices } = useHidePrices();
 
   if (hidePrices) return null;
 

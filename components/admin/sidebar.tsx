@@ -15,17 +15,51 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { useSettings } from "contexts/settings-context";
+import { useHidePrices } from "hooks/use-hide-prices";
 
 interface AdminSidebarProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
+// Isolated toggle component — if useSettings() fails, only this crashes, not the whole sidebar
+function HidePricesToggle() {
+  try {
+    const { hidePrices, toggleHidePrices } = useHidePrices();
+
+    return (
+      <button
+        onClick={toggleHidePrices}
+        className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-stone-800/50 hover:bg-stone-800 transition-colors"
+      >
+        <div className="flex items-center gap-3 text-stone-300">
+          {hidePrices ? (
+            <EyeOff className="w-5 h-5" />
+          ) : (
+            <Eye className="w-5 h-5" />
+          )}
+          <span className="text-sm font-medium">Hide Prices</span>
+        </div>
+        <div
+          className={`relative w-10 h-5 rounded-full transition-colors ${hidePrices ? "bg-amber-500" : "bg-stone-600"
+            }`}
+        >
+          <div
+            className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${hidePrices ? "translate-x-5" : "translate-x-0.5"
+              }`}
+          />
+        </div>
+      </button>
+    );
+  } catch {
+    // If settings context fails, just hide the toggle
+    return null;
+  }
+}
+
 export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const { signOut } = useAuth();
-  const { hidePrices, toggleHidePrices } = useSettings();
 
   const links = [
     { href: "/admin/orders", label: "Live Orders", icon: ClipboardList },
@@ -47,9 +81,8 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
 
       {/* Sidebar */}
       <div
-        className={`w-64 bg-stone-900 border-r border-stone-800 flex flex-col h-screen fixed left-0 top-0 z-50 transform transition-transform duration-300 md:translate-x-0 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`w-64 bg-stone-900 border-r border-stone-800 flex flex-col h-screen fixed left-0 top-0 z-50 transform transition-transform duration-300 md:translate-x-0 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="p-6 flex items-center justify-between">
           <h1 className="text-xl font-bold">
@@ -73,11 +106,10 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
                 key={link.href}
                 href={link.href}
                 onClick={onClose}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-                  isActive
-                    ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-                    : "text-stone-400 hover:bg-stone-800 hover:text-stone-100"
-                }`}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${isActive
+                  ? "bg-amber-500/10 text-amber-400 border border-amber-500/20"
+                  : "text-stone-400 hover:bg-stone-800 hover:text-stone-100"
+                  }`}
               >
                 <Icon className="w-5 h-5" />
                 <span className="font-medium">{link.label}</span>
@@ -87,31 +119,7 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         </nav>
 
         <div className="p-4 border-t border-stone-800 space-y-3">
-          {/* Hide Prices Toggle */}
-          <button
-            onClick={toggleHidePrices}
-            className="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-stone-800/50 hover:bg-stone-800 transition-colors"
-          >
-            <div className="flex items-center gap-3 text-stone-300">
-              {hidePrices ? (
-                <EyeOff className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
-              <span className="text-sm font-medium">Hide Prices</span>
-            </div>
-            <div
-              className={`relative w-10 h-5 rounded-full transition-colors ${
-                hidePrices ? "bg-amber-500" : "bg-stone-600"
-              }`}
-            >
-              <div
-                className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${
-                  hidePrices ? "translate-x-5" : "translate-x-0.5"
-                }`}
-              />
-            </div>
-          </button>
+          <HidePricesToggle />
 
           <Link
             href="/"

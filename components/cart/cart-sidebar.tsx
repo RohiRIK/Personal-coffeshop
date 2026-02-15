@@ -1,7 +1,7 @@
 "use client";
 
 import { useCart } from "contexts/cart-context";
-import { useSettings } from "contexts/settings-context";
+import { useHidePrices } from "hooks/use-hide-prices";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -13,7 +13,7 @@ interface CartSidebarProps {
 
 export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
   const { items, removeItem, updateQuantity, total } = useCart();
-  const { hidePrices } = useSettings();
+  const { hidePrices } = useHidePrices();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -34,9 +34,8 @@ export function CartSidebar({ isOpen, onClose }: CartSidebarProps) {
 
       {/* Sidebar */}
       <div
-        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-stone-900 border-l border-stone-700 z-50 transform transition-transform duration-300 ease-in-out shadow-2xl flex flex-col ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
+        className={`fixed inset-y-0 right-0 w-full sm:w-96 bg-stone-900 border-l border-stone-700 z-50 transform transition-transform duration-300 ease-in-out shadow-2xl flex flex-col ${isOpen ? "translate-x-0" : "translate-x-full"
+          }`}
       >
         <div className="p-4 border-b border-stone-800 flex items-center justify-between">
           <h2 className="text-xl font-bold text-stone-100">Your Order</h2>

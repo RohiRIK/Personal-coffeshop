@@ -8,36 +8,62 @@ import {
 import { db } from "./index";
 import type { AppSettings } from "./types";
 
-const SETTINGS_DOC = doc(db, "settings", "app");
-
 const DEFAULT_SETTINGS: AppSettings = {
   hidePrices: false,
 };
 
+function getSettingsDoc() {
+  return doc(db, "settings", "app");
+}
+
 export async function getAppSettings(): Promise<AppSettings> {
-  const snap = await getDoc(SETTINGS_DOC);
-  if (snap.exists()) {
-    return snap.data() as AppSettings;
+  try {
+    const snap = await getDoc(getSettingsDoc());
+    if (snap.exists()) {
+      return snap.data() as AppSettings;
+    }
+    // Create default settings if they don't exist
+    await setDoc(getSettingsDoc(), DEFAULT_SETTINGS);
+    return DEFAULT_SETTINGS;
+  } catch (error) {
+    console.error("Failed to get app settings:", error);
+    return DEFAULT_SETTINGS;
   }
-  // Create default settings if they don't exist
-  await setDoc(SETTINGS_DOC, DEFAULT_SETTINGS);
-  return DEFAULT_SETTINGS;
 }
 
 export async function updateAppSettings(
   settings: Partial<AppSettings>,
 ): Promise<void> {
-  await setDoc(SETTINGS_DOC, settings, { merge: true });
+  try {
+    await setDoc(getSettingsDoc(), settings, { merge: true });
+  } catch (error) {
+    console.error("Failed to update app settings:", error);
+  }
 }
 
 export function onAppSettingsChange(
   callback: (settings: AppSettings) => void,
+  onError?: (error: Error) => void,
 ): Unsubscribe {
-  return onSnapshot(SETTINGS_DOC, (snap) => {
-    if (snap.exists()) {
-      callback(snap.data() as AppSettings);
-    } else {
-      callback(DEFAULT_SETTINGS);
-    }
-  });
+  try {
+    return onSnapshot(
+      getSettingsDoc(),
+      (snap) => {
+        if (snap.exists()) {
+          callback(snap.data() as AppSettings);
+        } else {
+          callback(DEFAULT_SETTINGS);
+        }
+      },
+      (error) => {
+        console.error("Settings snapshot error:", error);
+        if (onError) onError(error);
+      },
+    );
+  } catch (error) {
+    console.error("Failed to setup settings listener:", error);
+    // Return a no-op unsubscribe
+    callback(DEFAULT_SETTINGS);
+    return () => { };
+  }
 }

@@ -14,12 +14,14 @@ export function useAdminOrders() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Initialize audio on mount
+  /* 
   useEffect(() => {
     if (typeof window !== "undefined") {
       audioRef.current = new Audio("/sounds/notification.mp3");
       audioRef.current.volume = 0.5;
     }
   }, []);
+  */
 
   const playNotificationSound = () => {
     if (audioRef.current) {
@@ -78,7 +80,7 @@ export function useAdminOrders() {
     );
 
     return () => unsubscribe();
-  }, [orders]);
+  }, []);
 
   const updateStatus = async (orderId: string, newStatus: Order["status"]) => {
     try {

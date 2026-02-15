@@ -4,7 +4,7 @@ import { useState } from "react";
 import { MILK_OPTIONS, CUP_OPTIONS, SUGAR_OPTIONS } from "lib/constants";
 import { useCart } from "contexts/cart-context";
 import { useInventory } from "hooks/use-inventory";
-import { useSettings } from "contexts/settings-context";
+import { useHidePrices } from "hooks/use-hide-prices";
 import { toast } from "sonner";
 
 interface CustomizationFormProps {
@@ -22,7 +22,7 @@ export function CustomizationForm({
 }: CustomizationFormProps) {
   const { addItem } = useCart();
   const { isAvailable } = useInventory();
-  const { hidePrices } = useSettings();
+  const { hidePrices } = useHidePrices();
   const [selectedMilk, setSelectedMilk] = useState("whole");
   const [selectedCup, setSelectedCup] = useState("ceramic");
   const [selectedSugar, setSelectedSugar] = useState("none");
@@ -61,11 +61,10 @@ export function CustomizationForm({
                 key={milk.id}
                 onClick={() => available && setSelectedMilk(milk.id)}
                 disabled={!available}
-                className={`p-3 rounded-lg border-2 transition-all duration-200 relative overflow-hidden ${
-                  selectedMilk === milk.id
-                    ? "border-amber-500 bg-amber-500/20 text-amber-400"
-                    : "border-stone-700 bg-stone-800 text-stone-300"
-                } ${!available ? "opacity-50 cursor-not-allowed grayscale" : "hover:border-stone-600 hover:bg-stone-700"}`}
+                className={`p-3 rounded-lg border-2 transition-all duration-200 relative overflow-hidden ${selectedMilk === milk.id
+                  ? "border-amber-500 bg-amber-500/20 text-amber-400"
+                  : "border-stone-700 bg-stone-800 text-stone-300"
+                  } ${!available ? "opacity-50 cursor-not-allowed grayscale" : "hover:border-stone-600 hover:bg-stone-700"}`}
               >
                 {milk.name}
                 {!available && (
@@ -92,11 +91,10 @@ export function CustomizationForm({
                 key={cup.id}
                 onClick={() => available && setSelectedCup(cup.id)}
                 disabled={!available}
-                className={`p-4 rounded-lg border-2 transition-all duration-200 text-left relative overflow-hidden ${
-                  selectedCup === cup.id
-                    ? "border-amber-500 bg-amber-500/20"
-                    : "border-stone-700 bg-stone-800"
-                } ${!available ? "opacity-50 cursor-not-allowed grayscale" : "hover:border-stone-600 hover:bg-stone-700"}`}
+                className={`p-4 rounded-lg border-2 transition-all duration-200 text-left relative overflow-hidden ${selectedCup === cup.id
+                  ? "border-amber-500 bg-amber-500/20"
+                  : "border-stone-700 bg-stone-800"
+                  } ${!available ? "opacity-50 cursor-not-allowed grayscale" : "hover:border-stone-600 hover:bg-stone-700"}`}
               >
                 <span
                   className={`block font-bold ${selectedCup === cup.id ? "text-amber-400" : "text-stone-100"}`}
@@ -128,11 +126,10 @@ export function CustomizationForm({
             <button
               key={sugar.id}
               onClick={() => setSelectedSugar(sugar.id)}
-              className={`p-3 rounded-lg border-2 transition-all duration-200 text-center ${
-                selectedSugar === sugar.id
-                  ? "border-amber-500 bg-amber-500/20 text-amber-400"
-                  : "border-stone-700 bg-stone-800 text-stone-300 hover:border-stone-600 hover:bg-stone-700"
-              }`}
+              className={`p-3 rounded-lg border-2 transition-all duration-200 text-center ${selectedSugar === sugar.id
+                ? "border-amber-500 bg-amber-500/20 text-amber-400"
+                : "border-stone-700 bg-stone-800 text-stone-300 hover:border-stone-600 hover:bg-stone-700"
+                }`}
             >
               <span className="flex justify-center gap-0.5 mb-1">
                 {sugar.level === 0 ? (
@@ -141,11 +138,10 @@ export function CustomizationForm({
                   Array.from({ length: sugar.level }).map((_, i) => (
                     <span
                       key={i}
-                      className={`w-2 h-2 rounded-full ${
-                        selectedSugar === sugar.id
-                          ? "bg-amber-400"
-                          : "bg-stone-500"
-                      }`}
+                      className={`w-2 h-2 rounded-full ${selectedSugar === sugar.id
+                        ? "bg-amber-400"
+                        : "bg-stone-500"
+                        }`}
                     />
                   ))
                 )}

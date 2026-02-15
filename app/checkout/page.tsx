@@ -2,7 +2,7 @@
 
 import { useAuth } from "contexts/auth-context";
 import { useCart } from "contexts/cart-context";
-import { useSettings } from "contexts/settings-context";
+import { useHidePrices } from "hooks/use-hide-prices";
 import { createOrder } from "lib/firebase/orders";
 import { OrderItem } from "lib/firebase/types";
 import Link from "next/link";
@@ -14,7 +14,7 @@ import { toast } from "sonner";
 export default function CheckoutPage() {
   const { user, loading: authLoading } = useAuth();
   const { items, total, clearCart } = useCart();
-  const { hidePrices } = useSettings();
+  const { hidePrices } = useHidePrices();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 

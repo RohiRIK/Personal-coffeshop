@@ -11,24 +11,43 @@ export function useAdminOrders() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const previousOrderCountRef = useRef<number | null>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioContextRef = useRef<AudioContext | null>(null);
 
-  // Initialize audio on mount
-  /* 
+  // Initialize AudioContext
   useEffect(() => {
     if (typeof window !== "undefined") {
-      audioRef.current = new Audio("/sounds/notification.mp3");
-      audioRef.current.volume = 0.5;
+      audioContextRef.current = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
     }
   }, []);
-  */
 
   const playNotificationSound = () => {
-    if (audioRef.current) {
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch((e) => {
-        console.log("Audio play failed (user interaction required):", e);
-      });
+    try {
+      const ctx = audioContextRef.current;
+      if (!ctx) return;
+
+      // Create oscillator for "ding" sound
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      // Sound properties
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(800, ctx.currentTime); // High pitch
+      oscillator.frequency.exponentialRampToValueAtTime(
+        400,
+        ctx.currentTime + 0.5,
+      ); // Drop pitch
+
+      gainNode.gain.setValueAtTime(0.3, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.5);
+
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + 0.5);
+    } catch (e) {
+      console.log("Audio play failed:", e);
     }
   };
 

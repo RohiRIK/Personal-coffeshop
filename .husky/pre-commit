@@ -1,0 +1,14 @@
+#!/bin/sh
+# Robust Prettier Hook
+
+# Get staged files that match prettier types
+files=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.(js|jsx|ts|tsx|css|md|json)$')
+
+if [ -n "$files" ]; then
+  echo "Formatting staged files..."
+  # Format using bun
+  echo "$files" | xargs bun run prettier --write --ignore-unknown
+  
+  # Add formatted files back to staging
+  echo "$files" | xargs git add
+fi

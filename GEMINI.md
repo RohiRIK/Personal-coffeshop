@@ -24,8 +24,9 @@ The application provides:
 
 **CRITICAL:** This project enforces strict Prettier formatting in CI.
 
-- **Rule:** ALWAYS run `bun run prettier --write .` before committing changes.
-- **Why:** The CI workflow (`ci.yml` or check step) will fail if code is not formatted. ignoring this leads to broken builds.
+- **Rule:** Code formatting is **automatically handled** by pre-commit hooks.
+- **Automation:** `husky` runs `prettier --write` on staged files. No manual action required.
+- **Why:** Prevents unformatted code from entering the repository and breaking CI.
 
 ### 2. Docker & CI/CD
 

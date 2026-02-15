@@ -11,7 +11,7 @@ services:
         - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}
         - NEXT_PUBLIC_FIREBASE_APP_ID=${NEXT_PUBLIC_FIREBASE_APP_ID}
     ports:
-      - "3000:3000"
+      - "3001:3000"
     env_file:
       - .env.local
     restart: unless-stopped

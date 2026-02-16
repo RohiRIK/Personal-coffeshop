@@ -37,6 +37,30 @@ The application provides:
   2.  `.github/workflows/docker.yml` (add `build-args` mapping to Secrets).
 - **Why:** Next.js inlines these variables at build time. If missing, the build fails (e.g. `auth/invalid-api-key`).
 
+#### Docker Compose Files
+
+| File                            | Purpose                                    | Port   | When to Run                                   |
+| ------------------------------- | ------------------------------------------ | ------ | --------------------------------------------- |
+| `docker-compose.yml` (root)     | **Dev** — builds image locally from source | `3001` | After code changes, to test locally           |
+| `deployment/docker-compose.yml` | **Prod** — pulls latest GHCR image         | `3000` | After pushing to GitHub (CI builds the image) |
+
+**Dev workflow:**
+
+```bash
+# Build and run locally after code changes
+docker-compose up -d --build
+# App available at http://localhost:3001
+```
+
+**Prod workflow:**
+
+```bash
+# After pushing to GitHub (CI publishes image to GHCR)
+cd deployment
+docker-compose pull && docker-compose up -d
+# App available at http://localhost:3000
+```
+
 ### 3. Type Safety
 
 - **Rule:** Ensure interfaces in `lib/firebase/types.ts` are updated when new data fields (like `imageUrl`) are introduced.
@@ -49,6 +73,8 @@ The application provides:
 
 ## Key Commands
 
-- `bun run dev`: Start development server.
+- `bun run dev`: Start development server (local, no Docker).
 - `bun run build`: Production build (checks Types and builds PWA).
 - `bun run prettier --write .`: Fix all formatting issues.
+- `docker-compose up -d --build`: Build & run dev container on port 3001.
+- `cd deployment && docker-compose up -d`: Run prod container on port 3000.

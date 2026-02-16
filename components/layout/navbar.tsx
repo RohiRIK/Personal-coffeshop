@@ -5,7 +5,15 @@ import { useState } from "react";
 import { UserMenu } from "components/auth/user-menu";
 import { CartSidebar } from "components/cart/cart-sidebar";
 import { useCart } from "contexts/cart-context";
-import { Menu, X, Coffee, ClipboardList, ShoppingBag } from "lucide-react";
+import {
+  Menu,
+  X,
+  Coffee,
+  ClipboardList,
+  ShoppingBag,
+  Trophy,
+  BookOpen,
+} from "lucide-react";
 
 export function Navbar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -35,6 +43,18 @@ export function Navbar() {
               className="text-stone-300 hover:text-amber-400 text-sm font-medium transition-colors"
             >
               My Orders
+            </Link>
+            <Link
+              href="/leaderboard"
+              className="text-stone-300 hover:text-amber-400 text-sm font-medium transition-colors"
+            >
+              Leaderboard
+            </Link>
+            <Link
+              href="/guestbook"
+              className="text-stone-300 hover:text-amber-400 text-sm font-medium transition-colors"
+            >
+              Guestbook
             </Link>
 
             <button
@@ -98,6 +118,22 @@ export function Navbar() {
               >
                 <ClipboardList className="w-5 h-5" />
                 My Orders
+              </Link>
+              <Link
+                href="/leaderboard"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-lg text-stone-300 hover:bg-stone-800 hover:text-amber-400 transition-colors"
+              >
+                <Trophy className="w-5 h-5" />
+                Leaderboard
+              </Link>
+              <Link
+                href="/guestbook"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center gap-3 p-3 rounded-lg text-stone-300 hover:bg-stone-800 hover:text-amber-400 transition-colors"
+              >
+                <BookOpen className="w-5 h-5" />
+                Guestbook
               </Link>
               <div className="pt-3 border-t border-stone-800">
                 <UserMenu />

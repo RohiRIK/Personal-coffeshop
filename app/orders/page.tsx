@@ -27,6 +27,7 @@ import { RateOrderModal } from "components/orders/rate-order-modal";
 import { Star } from "lucide-react";
 import { useCustomerInsights } from "hooks/use-customer-insights";
 import { VIPBadge } from "components/ui/vip-badge";
+import { StampCard } from "components/loyalty/stamp-card";
 
 export default function MyOrdersPage() {
   const { user, loading: authLoading } = useAuth();
@@ -121,183 +122,188 @@ export default function MyOrdersPage() {
         </div>
       </header>
 
-      {/* Active Orders Section */}
-      {activeOrders.length > 0 && (
-        <section>
-          <h2 className="text-sm font-bold text-stone-500 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-            In Progress
-          </h2>
-          <div className="space-y-4">
-            {activeOrders.map((order) => (
-              <div
-                key={order.id}
-                className="bg-stone-900 rounded-2xl p-6 border border-amber-500/20 shadow-lg shadow-amber-900/10 relative overflow-hidden"
-              >
-                <div className="absolute top-0 right-0 p-4">
-                  <StatusBadge status={order.status} size="large" />
-                </div>
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        {/* Stamp Card */}
+        <StampCard />
 
-                <div className="mb-4">
-                  <div className="text-xs text-stone-500 uppercase tracking-wider mb-1">
-                    Order #{order.id.slice(-4)}
+        {/* Active Orders Section */}
+        {activeOrders.length > 0 && (
+          <section>
+            <h2 className="text-sm font-bold text-stone-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              In Progress
+            </h2>
+            <div className="space-y-4">
+              {activeOrders.map((order) => (
+                <div
+                  key={order.id}
+                  className="bg-stone-900 rounded-2xl p-6 border border-amber-500/20 shadow-lg shadow-amber-900/10 relative overflow-hidden"
+                >
+                  <div className="absolute top-0 right-0 p-4">
+                    <StatusBadge status={order.status} size="large" />
                   </div>
-                  <div className="text-2xl font-bold text-white">
-                    {order.status === "ready"
-                      ? "Ready for Pickup"
-                      : order.status === "preparing"
-                        ? "Preparing your order..."
-                        : "Order Received"}
-                  </div>
-                  <div className="text-stone-400 text-sm mt-1">
-                    <Clock className="w-3 h-3 inline mr-1" />
-                    {formatDistanceToNow(order.createdAt, {
-                      addSuffix: true,
-                    })}
-                  </div>
-                </div>
 
-                <div className="space-y-3 bg-stone-950/50 p-4 rounded-xl border border-stone-800">
-                  {order.items.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="flex justify-between items-start text-sm"
-                    >
-                      <div className="flex gap-3">
-                        <span className="font-bold text-stone-500">
-                          {item.quantity}x
-                        </span>
-                        <div>
-                          <span className="text-stone-200 block">
-                            {item.name}
+                  <div className="mb-4">
+                    <div className="text-xs text-stone-500 uppercase tracking-wider mb-1">
+                      Order #{order.id.slice(-4)}
+                    </div>
+                    <div className="text-2xl font-bold text-white">
+                      {order.status === "ready"
+                        ? "Ready for Pickup"
+                        : order.status === "preparing"
+                          ? "Preparing your order..."
+                          : "Order Received"}
+                    </div>
+                    <div className="text-stone-400 text-sm mt-1">
+                      <Clock className="w-3 h-3 inline mr-1" />
+                      {formatDistanceToNow(order.createdAt, {
+                        addSuffix: true,
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="space-y-3 bg-stone-950/50 p-4 rounded-xl border border-stone-800">
+                    {order.items.map((item, idx) => (
+                      <div
+                        key={idx}
+                        className="flex justify-between items-start text-sm"
+                      >
+                        <div className="flex gap-3">
+                          <span className="font-bold text-stone-500">
+                            {item.quantity}x
                           </span>
-                          <span className="text-stone-500 text-xs text block">
-                            {[item.milk, item.cup, item.sugar]
-                              .filter(Boolean)
-                              .join(", ")}
-                          </span>
+                          <div>
+                            <span className="text-stone-200 block">
+                              {item.name}
+                            </span>
+                            <span className="text-stone-500 text-xs text block">
+                              {[item.milk, item.cup, item.sugar]
+                                .filter(Boolean)
+                                .join(", ")}
+                            </span>
+                          </div>
                         </div>
+                        <span className="text-stone-500">
+                          ${(item.price * item.quantity).toFixed(2)}
+                        </span>
                       </div>
-                      <span className="text-stone-500">
-                        ${(item.price * item.quantity).toFixed(2)}
+                    ))}
+                    <div className="pt-3 mt-3 border-t border-stone-800 flex justify-between font-bold">
+                      <span className="text-stone-400">Total</span>
+                      <span className="text-amber-500">
+                        ${order.total.toFixed(2)}
                       </span>
                     </div>
-                  ))}
-                  <div className="pt-3 mt-3 border-t border-stone-800 flex justify-between font-bold">
-                    <span className="text-stone-400">Total</span>
-                    <span className="text-amber-500">
-                      ${order.total.toFixed(2)}
-                    </span>
                   </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Past Orders Section */}
+        <section>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-bold text-stone-500 uppercase tracking-widest flex items-center gap-2">
+              <HistoryIcon className="w-4 h-4" />
+              Past Orders
+            </h2>
+          </div>
+
+          <div className="space-y-3">
+            {pastOrders.map((order) => (
+              <div
+                key={order.id}
+                className="bg-stone-900/50 hover:bg-stone-900 transition-colors rounded-xl p-4 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between group gap-4"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-stone-800 shrink-0 overflow-hidden relative border border-stone-700">
+                    {order.items[0]?.imageUrl ? (
+                      <Image
+                        src={order.items[0].imageUrl}
+                        alt={order.items[0].name}
+                        fill
+                        className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-stone-500">
+                        <Coffee className="w-6 h-6" />
+                      </div>
+                    )}
+                    {order.items.length > 1 && (
+                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-xs font-bold backdrop-blur-[1px]">
+                        +{order.items.length - 1}
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <div className="font-bold text-stone-200 text-sm">
+                      {order.items.map((i) => i.name).join(", ")}
+                    </div>
+                    <div className="text-xs text-stone-500 flex items-center gap-2">
+                      <span>{format(order.createdAt, "MMM d, h:mm a")}</span>
+                      <span>•</span>
+                      <span>${order.total.toFixed(2)}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 sm:self-center self-end">
+                  {order.status === "completed" && !order.rating && (
+                    <button
+                      onClick={() => setRatingOrder(order)}
+                      className="text-xs font-bold text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 px-3 py-1.5 rounded-full transition-colors border border-amber-500/20"
+                    >
+                      Rate Order
+                    </button>
+                  )}
+                  {order.rating && (
+                    <div className="flex gap-0.5" title="You rated this order">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`w-3 h-3 ${
+                            i < order.rating!
+                              ? "fill-amber-500 text-amber-500"
+                              : "text-stone-700"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  <StatusBadge status={order.status} size="small" />
                 </div>
               </div>
             ))}
+
+            {pastOrders.length === 0 && orders.length > 0 && (
+              <div className="text-stone-500 italic text-sm text-center py-8 bg-stone-900/30 rounded-xl">
+                No past orders yet.
+              </div>
+            )}
+
+            {orders.length === 0 && (
+              <div className="text-center py-12">
+                <div className="w-16 h-16 bg-stone-900 rounded-full flex items-center justify-center mx-auto mb-4 text-stone-600">
+                  <Package className="w-8 h-8 scale-x-[-1]" />
+                </div>
+                <h3 className="text-lg font-bold text-stone-300 mb-2">
+                  No orders yet
+                </h3>
+                <p className="text-stone-500 mb-6 max-w-xs mx-auto">
+                  Looks like you haven't tried our delicious coffee yet!
+                </p>
+                <Link
+                  href="/menu"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-xl transition-colors"
+                >
+                  Browse Menu <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            )}
           </div>
         </section>
-      )}
-
-      {/* Past Orders Section */}
-      <section>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-bold text-stone-500 uppercase tracking-widest flex items-center gap-2">
-            <HistoryIcon className="w-4 h-4" />
-            Past Orders
-          </h2>
-        </div>
-
-        <div className="space-y-3">
-          {pastOrders.map((order) => (
-            <div
-              key={order.id}
-              className="bg-stone-900/50 hover:bg-stone-900 transition-colors rounded-xl p-4 border border-stone-800 flex flex-col sm:flex-row sm:items-center justify-between group gap-4"
-            >
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-xl bg-stone-800 shrink-0 overflow-hidden relative border border-stone-700">
-                  {order.items[0]?.imageUrl ? (
-                    <Image
-                      src={order.items[0].imageUrl}
-                      alt={order.items[0].name}
-                      fill
-                      className="object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-stone-500">
-                      <Coffee className="w-6 h-6" />
-                    </div>
-                  )}
-                  {order.items.length > 1 && (
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white text-xs font-bold backdrop-blur-[1px]">
-                      +{order.items.length - 1}
-                    </div>
-                  )}
-                </div>
-                <div>
-                  <div className="font-bold text-stone-200 text-sm">
-                    {order.items.map((i) => i.name).join(", ")}
-                  </div>
-                  <div className="text-xs text-stone-500 flex items-center gap-2">
-                    <span>{format(order.createdAt, "MMM d, h:mm a")}</span>
-                    <span>•</span>
-                    <span>${order.total.toFixed(2)}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-3 sm:self-center self-end">
-                {order.status === "completed" && !order.rating && (
-                  <button
-                    onClick={() => setRatingOrder(order)}
-                    className="text-xs font-bold text-amber-500 hover:text-amber-400 hover:bg-amber-500/10 px-3 py-1.5 rounded-full transition-colors border border-amber-500/20"
-                  >
-                    Rate Order
-                  </button>
-                )}
-                {order.rating && (
-                  <div className="flex gap-0.5" title="You rated this order">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-3 h-3 ${
-                          i < order.rating!
-                            ? "fill-amber-500 text-amber-500"
-                            : "text-stone-700"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                )}
-                <StatusBadge status={order.status} size="small" />
-              </div>
-            </div>
-          ))}
-
-          {pastOrders.length === 0 && orders.length > 0 && (
-            <div className="text-stone-500 italic text-sm text-center py-8 bg-stone-900/30 rounded-xl">
-              No past orders yet.
-            </div>
-          )}
-
-          {orders.length === 0 && (
-            <div className="text-center py-12">
-              <div className="w-16 h-16 bg-stone-900 rounded-full flex items-center justify-center mx-auto mb-4 text-stone-600">
-                <Package className="w-8 h-8 scale-x-[-1]" />
-              </div>
-              <h3 className="text-lg font-bold text-stone-300 mb-2">
-                No orders yet
-              </h3>
-              <p className="text-stone-500 mb-6 max-w-xs mx-auto">
-                Looks like you haven't tried our delicious coffee yet!
-              </p>
-              <Link
-                href="/menu"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-amber-500 hover:bg-amber-400 text-stone-950 font-bold rounded-xl transition-colors"
-              >
-                Browse Menu <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          )}
-        </div>
-      </section>
+      </div>
 
       {ratingOrder && (
         <RateOrderModal

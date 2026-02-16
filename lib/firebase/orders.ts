@@ -10,6 +10,7 @@ import {
   orderBy,
   serverTimestamp,
   Timestamp,
+  increment,
 } from "firebase/firestore";
 import { db } from "./index";
 import type { Order, OrderItem, RecipeIngredient } from "./types";
@@ -71,6 +72,16 @@ export async function createOrder(
     deductInventory(items, recipeMap.size > 0 ? recipeMap : undefined).catch(
       (err) => console.error("Inventory deduction failed:", err),
     );
+
+    // Add loyalty stamp
+    try {
+      const userRef = doc(db, "users", userId);
+      updateDoc(userRef, { stamps: increment(1) }).catch((err) =>
+        console.error("Stamp increment failed:", err),
+      );
+    } catch {
+      // Don't block order if stamp fails
+    }
 
     return docRef.id;
   } catch (error) {

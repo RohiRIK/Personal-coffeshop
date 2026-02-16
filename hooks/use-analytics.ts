@@ -27,6 +27,7 @@ interface AnalyticsData {
   averageOrderValue: number;
   salesByDate: DailySales[];
   popularItems: ItemPopularity[];
+  recentOrders: Order[];
   loading: boolean;
   error: string | null;
 }
@@ -38,6 +39,7 @@ export function useAnalytics(days = 30) {
     averageOrderValue: 0,
     salesByDate: [],
     popularItems: [],
+    recentOrders: [],
     loading: true,
     error: null,
   });
@@ -63,6 +65,7 @@ export function useAnalytics(days = 30) {
             string,
             { count: number; revenue: number }
           >();
+          const recentOrders: Order[] = [];
 
           // Initialize sales map with dates
           for (let i = 0; i < days; i++) {
@@ -89,6 +92,7 @@ export function useAnalytics(days = 30) {
             ) {
               totalRevenue += order.total;
               totalOrders += 1;
+              recentOrders.push(order);
 
               // Daily Sales
               const dateStr = orderDate.toLocaleDateString("en-US", {
@@ -133,6 +137,7 @@ export function useAnalytics(days = 30) {
             averageOrderValue: totalOrders > 0 ? totalRevenue / totalOrders : 0,
             salesByDate,
             popularItems,
+            recentOrders,
             loading: false,
             error: null,
           });

@@ -3,6 +3,8 @@ import { getMenuItems } from "lib/firebase/menu";
 import type { MenuItem } from "lib/firebase/types";
 import { CATEGORIES } from "lib/constants";
 import { MenuCard } from "components/menu/menu-card";
+import { SurpriseMeButton } from "components/menu/surprise-me-button";
+import { DailySpecialBanner } from "components/menu/daily-special-banner";
 
 export const metadata = {
   title: "Menu",
@@ -61,8 +63,16 @@ export default async function MenuPage() {
           </p>
         </div>
 
+        {/* Daily Special */}
+        <DailySpecialBanner />
+
         {/* Category Filter */}
         <CategoryFilter />
+
+        {/* Surprise Me */}
+        <div className="flex justify-center mb-8">
+          <SurpriseMeButton items={menuItems} />
+        </div>
 
         {/* Menu Grid */}
         {menuItems.length > 0 ? (

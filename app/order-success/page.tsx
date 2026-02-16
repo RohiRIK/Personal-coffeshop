@@ -5,11 +5,15 @@ import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { CheckCircle, Coffee, Clock, ArrowRight } from "lucide-react";
 import confetti from "canvas-confetti";
+import { reactToOrder } from "lib/firebase/orders";
+
+const REACTION_EMOJIS = ["☕", "🔥", "❤️", "😍", "🎉", "🙏"];
 
 export default function OrderSuccessPage() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
   const [showConfetti, setShowConfetti] = useState(false);
+  const [sentReaction, setSentReaction] = useState<string | null>(null);
 
   useEffect(() => {
     // Trigger confetti on mount
@@ -23,6 +27,23 @@ export default function OrderSuccessPage() {
       });
     }
   }, [showConfetti]);
+
+  const handleReaction = async (emoji: string) => {
+    if (!orderId || sentReaction) return;
+    setSentReaction(emoji);
+    try {
+      await reactToOrder(orderId, emoji);
+      // Mini confetti burst for the reaction
+      confetti({
+        particleCount: 30,
+        spread: 40,
+        origin: { y: 0.7 },
+        colors: ["#f59e0b", "#fbbf24"],
+      });
+    } catch {
+      // Silently fail — don't ruin the moment
+    }
+  };
 
   return (
     <div className="min-h-screen bg-stone-900 flex items-center justify-center p-4">
@@ -46,7 +67,7 @@ export default function OrderSuccessPage() {
         </p>
 
         {/* Order Info Card */}
-        <div className="bg-stone-800 rounded-2xl p-6 border border-stone-700 mb-8">
+        <div className="bg-stone-800 rounded-2xl p-6 border border-stone-700 mb-6">
           <div className="flex items-center justify-center gap-2 text-amber-400 mb-4">
             <Clock className="w-5 h-5" />
             <span className="font-medium">Estimated: 5-10 minutes</span>
@@ -67,6 +88,35 @@ export default function OrderSuccessPage() {
             </p>
           </div>
         </div>
+
+        {/* Emoji Reactions */}
+        {orderId && (
+          <div className="mb-8">
+            <p className="text-stone-500 text-xs uppercase tracking-wider mb-3">
+              {sentReaction
+                ? "Thanks for the feedback!"
+                : "How are you feeling?"}
+            </p>
+            <div className="flex items-center justify-center gap-2">
+              {REACTION_EMOJIS.map((emoji) => (
+                <button
+                  key={emoji}
+                  onClick={() => handleReaction(emoji)}
+                  disabled={!!sentReaction}
+                  className={`text-2xl p-2 rounded-xl transition-all duration-200 ${
+                    sentReaction === emoji
+                      ? "bg-amber-500/20 scale-125 ring-2 ring-amber-500/50"
+                      : sentReaction
+                        ? "opacity-30 cursor-not-allowed"
+                        : "hover:bg-stone-800 hover:scale-110 active:scale-95"
+                  }`}
+                >
+                  {emoji}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="space-y-3">

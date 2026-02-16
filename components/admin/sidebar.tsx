@@ -14,8 +14,11 @@ import {
   BarChart3,
   Eye,
   EyeOff,
+  Sparkles,
 } from "lucide-react";
 import { useHidePrices } from "hooks/use-hide-prices";
+import { useState } from "react";
+import { DailySpecialDialog } from "./daily-special-dialog";
 
 interface AdminSidebarProps {
   isOpen: boolean;
@@ -62,6 +65,7 @@ function HidePricesToggle() {
 export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
   const pathname = usePathname();
   const { signOut } = useAuth();
+  const [specialOpen, setSpecialOpen] = useState(false);
 
   const links = [
     { href: "/admin/orders", label: "Live Orders", icon: ClipboardList },
@@ -123,6 +127,13 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
         </nav>
 
         <div className="p-4 border-t border-stone-800 space-y-3">
+          <button
+            onClick={() => setSpecialOpen(true)}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-stone-800/50 hover:bg-stone-800 transition-colors text-stone-300"
+          >
+            <Sparkles className="w-5 h-5 text-amber-400" />
+            <span className="text-sm font-medium">Daily Special</span>
+          </button>
           <HidePricesToggle />
 
           <Link
@@ -141,6 +152,11 @@ export function AdminSidebar({ isOpen, onClose }: AdminSidebarProps) {
           </button>
         </div>
       </div>
+
+      <DailySpecialDialog
+        open={specialOpen}
+        onClose={() => setSpecialOpen(false)}
+      />
     </>
   );
 }

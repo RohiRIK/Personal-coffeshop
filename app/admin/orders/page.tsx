@@ -146,6 +146,14 @@ export default function OrdersPage() {
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <StatusBadge status={order.status} />
+                      {order.reaction && (
+                        <span
+                          className="text-lg animate-bounce"
+                          title="Customer reaction"
+                        >
+                          {order.reaction}
+                        </span>
+                      )}
                       {order.rating && (
                         <div className="flex items-center gap-1 bg-amber-500/10 px-2 py-0.5 rounded-full border border-amber-500/20">
                           <Star className="w-3 h-3 fill-current text-amber-500" />

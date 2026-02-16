@@ -233,3 +233,20 @@ export async function rateOrder(
     throw error;
   }
 }
+
+// Emoji reaction on an order
+export async function reactToOrder(
+  orderId: string,
+  reaction: string,
+): Promise<void> {
+  try {
+    const orderRef = doc(db, ORDERS_COLLECTION, orderId);
+    await updateDoc(orderRef, {
+      reaction,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error("Error reacting to order:", error);
+    throw error;
+  }
+}

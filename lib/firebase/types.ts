@@ -40,6 +40,7 @@ export interface Order {
   status: "pending" | "preparing" | "ready" | "completed" | "cancelled";
   createdAt: Date;
   updatedAt?: Date;
+  reaction?: string;
   rating?: number;
   review?: string;
   emailSentReady?: boolean;
@@ -86,4 +87,6 @@ export interface Category {
 // App Settings Types
 export interface AppSettings {
   hidePrices: boolean;
+  dailySpecialId?: string;
+  dailySpecialNote?: string;
 }

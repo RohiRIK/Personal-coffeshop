@@ -3,11 +3,35 @@
 import { useState, useEffect } from "react";
 import { useInventory } from "hooks/use-inventory";
 import { MILK_OPTIONS, CUP_OPTIONS } from "lib/constants";
-import { Milk, Coffee } from "lucide-react";
+import { Milk, Coffee, FlaskConical } from "lucide-react";
+import { InventoryItem } from "lib/firebase/types";
+
+// IDs of the base ingredients seeded by inventory.ts
+const BASE_INGREDIENT_IDS = [
+  "espresso-beans",
+  "chocolate-syrup",
+  "vanilla-syrup",
+  "caramel-syrup",
+  "matcha-powder",
+  "whipped-cream",
+  "ice",
+  "sugar",
+];
 
 export default function InventoryPage() {
-  const { isAvailable, getQuantity, toggleAvailability, updateStock, loading } =
-    useInventory();
+  const {
+    inventory,
+    isAvailable,
+    getQuantity,
+    toggleAvailability,
+    updateStock,
+    loading,
+  } = useInventory();
+
+  // Derive base ingredients from full inventory list
+  const baseIngredients = inventory
+    .filter((item: InventoryItem) => BASE_INGREDIENT_IDS.includes(item.id))
+    .map((item: InventoryItem) => ({ id: item.id, name: item.name }));
 
   if (loading) {
     return <div className="text-stone-400">Loading inventory...</div>;
@@ -54,6 +78,27 @@ export default function InventoryPage() {
             onUpdateStock={updateStock}
           />
         </section>
+
+        {/* Base Ingredients */}
+        {baseIngredients.length > 0 && (
+          <section className="bg-stone-900 rounded-2xl border border-stone-800 overflow-hidden">
+            <div className="p-6 border-b border-stone-800 flex items-center gap-3">
+              <div className="p-2 bg-stone-800 rounded-lg">
+                <FlaskConical className="w-5 h-5 text-amber-500" />
+              </div>
+              <h2 className="text-xl font-bold text-stone-100">
+                Base Ingredients
+              </h2>
+            </div>
+            <InventoryTable
+              items={baseIngredients}
+              isAvailable={isAvailable}
+              getQuantity={getQuantity}
+              onToggle={toggleAvailability}
+              onUpdateStock={updateStock}
+            />
+          </section>
+        )}
       </div>
     </div>
   );

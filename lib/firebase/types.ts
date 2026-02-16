@@ -1,4 +1,9 @@
 // Menu Item Types
+export interface RecipeIngredient {
+  inventoryItemId: string;
+  quantity: number; // Amount deducted per drink
+}
+
 export interface MenuItem {
   id: string;
   name: string;
@@ -8,6 +13,7 @@ export interface MenuItem {
   imageUrl: string;
   tag: "Hot" | "Cold";
   available: boolean;
+  recipe?: RecipeIngredient[];
 }
 
 // Order Types

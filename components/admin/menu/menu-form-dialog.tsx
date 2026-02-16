@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MenuItem } from "lib/firebase/types";
+import { MenuItem, RecipeIngredient } from "lib/firebase/types";
 import { addMenuItem, updateMenuItem } from "lib/firebase/menu";
+import { useInventory } from "hooks/use-inventory";
 import { toast } from "sonner";
-import { X, Save, Loader2, Upload } from "lucide-react";
+import { X, Save, Loader2, Upload, Plus, Trash2 } from "lucide-react";
 
 interface MenuFormDialogProps {
   isOpen: boolean;
@@ -23,6 +24,7 @@ export function MenuFormDialog({
   itemToEdit,
 }: MenuFormDialogProps) {
   const [loading, setLoading] = useState(false);
+  const { inventory } = useInventory();
   const [formData, setFormData] = useState<Partial<MenuItem>>({
     name: "",
     description: "",
@@ -31,13 +33,14 @@ export function MenuFormDialog({
     imageUrl: "",
     tag: "Hot",
     available: true,
+    recipe: [],
   });
 
   // Reset or populate form when dialog opens/changes
   useEffect(() => {
     if (isOpen) {
       if (itemToEdit) {
-        setFormData(itemToEdit);
+        setFormData({ ...itemToEdit, recipe: itemToEdit.recipe || [] });
       } else {
         setFormData({
           name: "",
@@ -47,12 +50,47 @@ export function MenuFormDialog({
           imageUrl: "",
           tag: "Hot",
           available: true,
+          recipe: [],
         });
       }
     }
   }, [isOpen, itemToEdit]);
 
   if (!isOpen) return null;
+
+  const recipe = formData.recipe || [];
+
+  const addIngredient = () => {
+    setFormData({
+      ...formData,
+      recipe: [...recipe, { inventoryItemId: "", quantity: 1 }],
+    });
+  };
+
+  const removeIngredient = (index: number) => {
+    setFormData({
+      ...formData,
+      recipe: recipe.filter((_, i) => i !== index),
+    });
+  };
+
+  const updateIngredient = (
+    index: number,
+    field: keyof RecipeIngredient,
+    value: string | number,
+  ) => {
+    const updated: RecipeIngredient[] = recipe.map((item, i) => {
+      if (i !== index) return item;
+      return {
+        inventoryItemId:
+          field === "inventoryItemId"
+            ? (value as string)
+            : item.inventoryItemId,
+        quantity: field === "quantity" ? (value as number) : item.quantity,
+      };
+    });
+    setFormData({ ...formData, recipe: updated });
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,6 +103,11 @@ export function MenuFormDialog({
         return;
       }
 
+      // Filter out incomplete recipe entries
+      const cleanRecipe = recipe.filter(
+        (r) => r.inventoryItemId && r.quantity > 0,
+      );
+
       const itemData = {
         name: formData.name,
         description: formData.description || "",
@@ -73,6 +116,7 @@ export function MenuFormDialog({
         imageUrl: formData.imageUrl || "/placeholder-drink.png",
         tag: formData.tag as MenuItem["tag"],
         available: formData.available ?? true,
+        recipe: cleanRecipe,
       };
 
       if (itemToEdit) {
@@ -95,8 +139,8 @@ export function MenuFormDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
-      <div className="w-full max-w-lg bg-stone-900 border border-stone-800 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in duration-200">
-        <div className="p-6 border-b border-stone-800 flex items-center justify-between">
+      <div className="w-full max-w-lg bg-stone-900 border border-stone-800 rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in duration-200 max-h-[90vh] flex flex-col">
+        <div className="p-6 border-b border-stone-800 flex items-center justify-between shrink-0">
           <h2 className="text-xl font-bold text-stone-100">
             {itemToEdit ? "Edit Item" : "Add New Item"}
           </h2>
@@ -108,7 +152,7 @@ export function MenuFormDialog({
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto">
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2 col-span-2">
               <label className="text-sm font-medium text-stone-400">Name</label>
@@ -176,7 +220,7 @@ export function MenuFormDialog({
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                rows={3}
+                rows={2}
                 className="w-full bg-stone-950 border border-stone-800 rounded-xl px-4 py-2 text-stone-100 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 resize-none"
                 placeholder="Brief description of the drink..."
               />
@@ -221,6 +265,83 @@ export function MenuFormDialog({
                 <Upload className="w-4 h-4 text-stone-500 absolute left-3 top-2.5" />
               </div>
             </div>
+          </div>
+
+          {/* Recipe / Ingredients Section */}
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-medium text-stone-400">
+                Recipe (Base Ingredients)
+              </label>
+              <button
+                type="button"
+                onClick={addIngredient}
+                className="flex items-center gap-1 text-xs text-amber-500 hover:text-amber-400 transition-colors"
+              >
+                <Plus className="w-3 h-3" />
+                Add Ingredient
+              </button>
+            </div>
+
+            {recipe.length === 0 && (
+              <p className="text-xs text-stone-500 italic">
+                No ingredients linked. Add ingredients for automatic inventory
+                deduction.
+              </p>
+            )}
+
+            {recipe.map((ingredient, index) => (
+              <div
+                key={index}
+                className="flex items-center gap-2 bg-stone-950 border border-stone-800 rounded-xl p-2"
+              >
+                <select
+                  value={ingredient.inventoryItemId}
+                  onChange={(e) =>
+                    updateIngredient(index, "inventoryItemId", e.target.value)
+                  }
+                  className="flex-1 bg-transparent border-none text-stone-100 text-sm focus:outline-none appearance-none"
+                >
+                  <option value="" className="bg-stone-900">
+                    Select ingredient...
+                  </option>
+                  {inventory.map((inv) => (
+                    <option
+                      key={inv.id}
+                      value={inv.id}
+                      className="bg-stone-900"
+                    >
+                      {inv.name}
+                    </option>
+                  ))}
+                </select>
+
+                <div className="flex items-center gap-1 shrink-0">
+                  <span className="text-xs text-stone-500">Qty:</span>
+                  <input
+                    type="number"
+                    min="1"
+                    value={ingredient.quantity}
+                    onChange={(e) =>
+                      updateIngredient(
+                        index,
+                        "quantity",
+                        parseInt(e.target.value) || 1,
+                      )
+                    }
+                    className="w-14 bg-stone-800 border border-stone-700 rounded px-2 py-1 text-sm text-stone-100 focus:outline-none focus:border-amber-500 text-center"
+                  />
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => removeIngredient(index)}
+                  className="p-1 text-stone-500 hover:text-red-500 transition-colors"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ))}
           </div>
 
           <div className="pt-4 flex gap-3">

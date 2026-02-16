@@ -12,8 +12,9 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { db } from "./index";
-import type { Order, OrderItem } from "./types";
+import type { Order, OrderItem, RecipeIngredient } from "./types";
 import { deductInventory } from "./inventory";
+import { getMenuItem } from "./menu";
 import { v4 as uuidv4 } from "uuid";
 
 const ORDERS_COLLECTION = "orders";
@@ -51,9 +52,24 @@ export async function createOrder(
 
     const docRef = await addDoc(collection(db, ORDERS_COLLECTION), orderData);
 
+    // Build recipe map for inventory deduction
+    const recipeMap = new Map<string, RecipeIngredient[]>();
+    for (const item of items) {
+      if (item.menuItemId && !recipeMap.has(item.menuItemId)) {
+        try {
+          const menuItem = await getMenuItem(item.menuItemId);
+          if (menuItem?.recipe && menuItem.recipe.length > 0) {
+            recipeMap.set(item.menuItemId, menuItem.recipe);
+          }
+        } catch {
+          // Don't block order if recipe lookup fails
+        }
+      }
+    }
+
     // Deduct Inventory asynchronously (don't await to keep UI fast)
-    deductInventory(items).catch((err) =>
-      console.error("Inventory deduction failed:", err),
+    deductInventory(items, recipeMap.size > 0 ? recipeMap : undefined).catch(
+      (err) => console.error("Inventory deduction failed:", err),
     );
 
     return docRef.id;

@@ -11,9 +11,56 @@ import {
 } from "firebase/firestore";
 import { db } from "./index";
 import { MILK_OPTIONS, CUP_OPTIONS } from "../constants";
-import type { InventoryItem } from "./types";
+import type { InventoryItem, RecipeIngredient } from "./types";
 
 const INVENTORY_COLLECTION = "inventory";
+
+// Base ingredients to seed alongside milks/cups
+const BASE_INGREDIENTS: InventoryItem[] = [
+  {
+    id: "espresso-beans",
+    name: "Espresso Beans (shots)",
+    type: "other",
+    available: true,
+    quantity: 200,
+  },
+  {
+    id: "chocolate-syrup",
+    name: "Chocolate Syrup",
+    type: "syrup",
+    available: true,
+    quantity: 100,
+  },
+  {
+    id: "vanilla-syrup",
+    name: "Vanilla Syrup",
+    type: "syrup",
+    available: true,
+    quantity: 100,
+  },
+  {
+    id: "caramel-syrup",
+    name: "Caramel Syrup",
+    type: "syrup",
+    available: true,
+    quantity: 100,
+  },
+  {
+    id: "matcha-powder",
+    name: "Matcha Powder",
+    type: "other",
+    available: true,
+    quantity: 80,
+  },
+  {
+    id: "whipped-cream",
+    name: "Whipped Cream",
+    type: "topping",
+    available: true,
+    quantity: 100,
+  },
+  { id: "ice", name: "Ice", type: "other", available: true, quantity: 500 },
+];
 
 /**
  * Initialize inventory if empty
@@ -59,6 +106,11 @@ export async function initializeInventory() {
         available: true,
         quantity: 500,
       });
+
+      // Seed base ingredients
+      for (const ingredient of BASE_INGREDIENTS) {
+        await setDoc(doc(db, INVENTORY_COLLECTION, ingredient.id), ingredient);
+      }
     }
   } catch (error) {
     console.error("Error initializing inventory:", error);
@@ -86,25 +138,25 @@ export async function updateInventoryStatus(
 /**
  * Deduct inventory based on order items
  */
-export async function deductInventory(items: any[]): Promise<void> {
+export async function deductInventory(
+  items: any[],
+  recipes?: Map<string, RecipeIngredient[]>,
+): Promise<void> {
   try {
     const deductions: Record<string, number> = {};
 
     items.forEach((item) => {
-      // 1. Milk
+      // 1. Customization-based deductions (milk, cup, sugar)
       if (item.milk) {
-        // Map Name back to ID
         const milkOption = MILK_OPTIONS.find((m) => m.name === item.milk);
-        const milkId = milkOption?.id || item.milk.toLowerCase(); // Fallback
+        const milkId = milkOption?.id || item.milk.toLowerCase();
         deductions[milkId] = (deductions[milkId] || 0) + item.quantity;
       }
-      // 2. Cup
       if (item.cup) {
         const cupOption = CUP_OPTIONS.find((c) => c.name === item.cup);
         const cupId = cupOption?.id || item.cup.toLowerCase();
         deductions[cupId] = (deductions[cupId] || 0) + item.quantity;
       }
-      // 3. Sugar
       if (item.sugar && item.sugar !== "none") {
         let amount = 0;
         if (item.sugar === "light") amount = 1;
@@ -113,11 +165,23 @@ export async function deductInventory(items: any[]): Promise<void> {
         deductions["sugar"] =
           (deductions["sugar"] || 0) + amount * item.quantity;
       }
+
+      // 2. Recipe-based deductions (base ingredients)
+      if (recipes && item.menuItemId) {
+        const recipe = recipes.get(item.menuItemId);
+        if (recipe) {
+          recipe.forEach((ingredient) => {
+            deductions[ingredient.inventoryItemId] =
+              (deductions[ingredient.inventoryItemId] || 0) +
+              ingredient.quantity * item.quantity;
+          });
+        }
+      }
     });
 
     // Execute atomic updates
     const updates = Object.entries(deductions).map(async ([id, amount]) => {
-      if (!id) return; // Skip invalid
+      if (!id) return;
       const itemRef = doc(db, INVENTORY_COLLECTION, id);
 
       try {

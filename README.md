@@ -111,8 +111,12 @@ bun run dev --host 0.0.0.0
 ```
 
 1.  Find your computer's IP (e.g., `ifconfig` -> `192.168.1.5`).
-2.  Tell friends to visit `http://192.168.1.5:3000`.
+2.  Tell friends to visit `http://192.168.1.5:9025`.
 3.  **Pro Tip**: Generate a QR code for this URL and print it out!
+4.  **Why Port 9025?** "The Precision Recipe"
+    - **9 (Bars):** The industry standard for pump pressure.
+    - **25 (Seconds):** The lower bound of the ideal extraction window.
+    - _It effectively encodes the "minimum viable parameters" for a high-quality espresso shot._
 
 ---
 

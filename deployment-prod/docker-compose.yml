@@ -3,7 +3,7 @@ services:
     image: ghcr.io/rohirik/personal-coffeshop:latest
     container_name: coffee-shop
     ports:
-      - "3000:3000"
+      - "9025:3000"
     environment:
       - PORT=3000
       - HOSTNAME=0.0.0.0

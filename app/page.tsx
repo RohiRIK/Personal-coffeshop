@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getMenuItems } from "lib/firebase/menu";
+import { getAvailableMenuItems } from "lib/firebase/menu";
 import type { MenuItem } from "lib/firebase/types";
 import Image from "next/image";
 import { Coffee } from "lucide-react";
@@ -27,7 +27,7 @@ function FeaturedDrinks({ items }: { items: MenuItem[] }) {
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   className="object-cover group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/70 via-transparent to-transparent" />
 
                 {/* Tag badge */}
                 <div
@@ -75,7 +75,7 @@ function FeaturedDrinks({ items }: { items: MenuItem[] }) {
 function Hero() {
   return (
     <section className="relative h-[70vh] flex items-center justify-center overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-stone-900 via-stone-900/90 to-stone-900" />
+      <div className="absolute inset-0 bg-linear-to-b from-stone-900 via-stone-900/90 to-stone-900" />
       <div
         className="absolute inset-0 opacity-30"
         style={{
@@ -112,7 +112,9 @@ export default async function HomePage() {
   let menuItems: MenuItem[] = [];
 
   try {
-    menuItems = await getMenuItems();
+    menuItems = await getAvailableMenuItems();
+    // Redundant filter to ensure no sold-out items appear
+    menuItems = menuItems.filter((item) => item.available);
   } catch (error) {
     console.error("Error loading menu:", error);
   }

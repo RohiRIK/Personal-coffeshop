@@ -2,6 +2,12 @@
 
 This guide describes how to run the Personal Coffee Shop application from anywhere using Docker.
 
+- **Port:** `9025`
+  - **Why 9025?** "The Precision Recipe"
+    - **9 (Bars):** The industry standard for pump pressure.
+    - **25 (Seconds):** The lower bound of the ideal extraction window.
+    - _It effectively encodes the "minimum viable parameters" for a high-quality espresso shot._
+
 ## Prerequisites
 
 - **Docker** and **Docker Compose** installed.
@@ -19,7 +25,7 @@ This guide describes how to run the Personal Coffee Shop application from anywhe
         image: ghcr.io/rohirik/personal-coffeshop:latest
         container_name: coffee-shop
         ports:
-          - "3006:3000"
+          - "9025:3000"
         environment:
           - PORT=3000
           - HOSTNAME=0.0.0.0

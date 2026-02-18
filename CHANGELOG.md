@@ -4,6 +4,15 @@ All notable changes to the **Personal Coffeshop** platform are documented here.
 
 ---
 
+## [2026-02-18] — Deployment Fixes & Menu Visibility
+
+### 🐛 Fixes
+
+- **Menu Visibility** — Robustly filter out sold-out items from `MenuCard` and menu pages; enforce dynamic rendering to bypass stale cache.
+- **Docker Deployment** — Resolve port 3000 conflict by removing zombie container.
+- **Docker Config** — Separate local (`docker-compose.yml`) and production (`deployment-prod/docker-compose.yml`) configurations.
+- **Build Warnings** — Update `baseline-browser-mapping` to resolve build warning.
+
 ## [2026-02-16] — Fun Features, Analytics & Testing
 
 ### ✨ Features

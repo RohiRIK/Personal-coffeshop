@@ -5,6 +5,8 @@ import { CATEGORIES } from "lib/constants";
 import { notFound } from "next/navigation";
 import { MenuCard } from "components/menu/menu-card";
 
+export const revalidate = 0; // Disable static caching for menu categories
+
 export async function generateStaticParams() {
   return CATEGORIES.filter((c) => c.id !== "all").map((category) => ({
     category: category.id,
@@ -67,6 +69,8 @@ export default async function CategoryPage({
     // A better approach would be to have a mapping in the constants file
     const dbCategory = validCategory?.name || "Coffee";
     menuItems = await getMenuByCategory(dbCategory);
+    // Filter out sold out items
+    menuItems = menuItems.filter((item) => item.available);
   } catch (error) {
     console.error("Error loading menu category:", error);
   }

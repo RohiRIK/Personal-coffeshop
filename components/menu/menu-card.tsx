@@ -8,6 +8,8 @@ import { useHidePrices } from "hooks/use-hide-prices";
 export function MenuCard({ item }: { item: MenuItem }) {
   const { hidePrices } = useHidePrices();
 
+  if (!item.available) return null;
+
   return (
     <Link
       href={`/drink/${item.id}`}

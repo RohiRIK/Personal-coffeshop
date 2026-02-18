@@ -1,10 +1,12 @@
 import Link from "next/link";
-import { getMenuItems } from "lib/firebase/menu";
+import { getAvailableMenuItems } from "lib/firebase/menu";
 import type { MenuItem } from "lib/firebase/types";
 import { CATEGORIES } from "lib/constants";
 import { MenuCard } from "components/menu/menu-card";
 import { SurpriseMeButton } from "components/menu/surprise-me-button";
 import { DailySpecialBanner } from "components/menu/daily-special-banner";
+
+export const revalidate = 0; // Disable static caching for menu
 
 export const metadata = {
   title: "Menu",
@@ -36,7 +38,9 @@ export default async function MenuPage() {
   let menuItems: MenuItem[] = [];
 
   try {
-    menuItems = await getMenuItems();
+    menuItems = await getAvailableMenuItems();
+    // Redundant filter to ensure no sold-out items appear
+    menuItems = menuItems.filter((item) => item.available);
   } catch (error) {
     console.error("Error loading menu:", error);
   }
